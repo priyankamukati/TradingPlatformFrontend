@@ -1,15 +1,26 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import store from './store/store';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AdminHomePageContainer from './containers/adminContainer/screamsContainer/adminHomePageContainer';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <BrowserRouter>
+      <Routes>
+        <Route path ="/" element={<AdminHomePageContainer/>} />
+      </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
