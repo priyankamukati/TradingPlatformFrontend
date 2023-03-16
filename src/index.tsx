@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import store from './store/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import AdminHomePageContainer from './containers/adminContainer/screamsContainer/adminHomePageContainer';
+import AdminHomePageContainer from './containers/adminContainer/adminHomePageContainer';
 
 
 const root = ReactDOM.createRoot(

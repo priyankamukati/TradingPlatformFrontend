@@ -2,15 +2,15 @@ import styled from "styled-components";
 import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
 import { AdminHomePageContainerLogic } from "./adminHomePageContainer.hook";
-import { getAllStocks } from "../../../store/getAllStocks.slice";
-import { Stock } from "../../../model/stock";
-import { State } from "../../../model/state";
+import { getAllStocks } from "../../store/getAllStocks.slice";
+import { Stock } from "../../model/stock";
+import { State } from "../../model/state";
 import { Spinner } from "react-bootstrap";
-import { LoadingState } from "../../../model/loadingState";
+import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { saveStock } from "../../../store/saveStock.slice";
+import { saveStock } from "../../store/saveStock.slice";
 
 const AdminHomePageContainerWrapper = styled.div`
   display: flex;
