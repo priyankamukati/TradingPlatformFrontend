@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useEffect } from 'react';
-import { Stock } from '../../../model/stock';
+import { Stock } from '../../model/stock';
 import { IAdminHomePageContainerProps } from './adminHomePageContainer';
 
 export function AdminHomePageContainerLogic({ getAllStocks, saveStock, saveStocksResponse }: IAdminHomePageContainerProps) {
