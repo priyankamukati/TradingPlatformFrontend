@@ -10,6 +10,7 @@ import AdminHomePageContainer from './containers/adminContainer/adminHomePageCon
 import UserHomePageContainer from './containers/userContainer/userHomePageContainer';
 import OrderPageContainer from './containers/orderContainer/orderPageContainer';
 import UserOrdersViewPageContainer from './containers/userOrdersViewContainer/userOrdersViewPageContainer';
+import UserCashBalancePageContainer from './containers/userCashBalanceContainer/userCashBalancePageContainer';
 
 
 const root = ReactDOM.createRoot(
@@ -22,8 +23,9 @@ root.render(
       <Routes>
         <Route path ="/admin" element={<AdminHomePageContainer/>} />
         <Route path ="/" element={<UserHomePageContainer/>} />
-        <Route path ="/userOrder" element={<OrderPageContainer/>} />
-        <Route path ="/userAllOrderView" element={<UserOrdersViewPageContainer/>} />
+        <Route path ="/userorder" element={<OrderPageContainer/>} />
+        <Route path ="/userallorder" element={<UserOrdersViewPageContainer/>} />
+        <Route path ="/usercashbalance" element={<UserCashBalancePageContainer/>} />
        </Routes>
       </BrowserRouter>
     </Provider>

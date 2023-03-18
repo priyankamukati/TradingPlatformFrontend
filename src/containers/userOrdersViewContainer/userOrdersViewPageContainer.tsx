@@ -101,6 +101,8 @@ const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContaine
                     <StockText>{user_order.order_type}</StockText>
                     <StockText>{user_order.quantity}</StockText>
                     <StockText>{user_order.limit_price}</StockText>
+                    <StockText>{user_order.status}</StockText>
+                    <StockText>{user_order.status_reason}</StockText>
                   </HorizontalContainer>
                 </Alert>
               ))}

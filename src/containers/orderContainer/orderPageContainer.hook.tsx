@@ -58,6 +58,8 @@ export function OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersRes
     event.preventDefault();
     if(ticker && ticker.length > 0 && orderNature && companyName && orderType && quantity && ((limitPrice?? 0) >=0)) {
       const saveOrderRequest = new Order();
+      saveOrderRequest.user_id = 1;
+      saveOrderRequest.stock_id = 1;
       saveOrderRequest.ticker = ticker;
       saveOrderRequest.company_name = companyName;
       saveOrderRequest.order_nature = orderNature;
