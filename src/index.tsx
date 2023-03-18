@@ -7,6 +7,9 @@ import store from './store/store';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminHomePageContainer from './containers/adminContainer/adminHomePageContainer';
+import UserHomePageContainer from './containers/userContainer/userHomePageContainer';
+import OrderPageContainer from './containers/orderContainer/orderPageContainer';
+import UserOrdersViewPageContainer from './containers/userOrdersViewContainer/userOrdersViewPageContainer';
 
 
 const root = ReactDOM.createRoot(
@@ -17,8 +20,11 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
       <Routes>
-        <Route path ="/" element={<AdminHomePageContainer/>} />
-      </Routes>
+        <Route path ="/admin" element={<AdminHomePageContainer/>} />
+        <Route path ="/" element={<UserHomePageContainer/>} />
+        <Route path ="/userOrder" element={<OrderPageContainer/>} />
+        <Route path ="/userAllOrderView" element={<UserOrdersViewPageContainer/>} />
+       </Routes>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
