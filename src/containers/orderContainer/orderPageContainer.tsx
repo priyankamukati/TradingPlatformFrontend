@@ -80,7 +80,7 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
   const { ticker, companyName, orderNature, orderType,quantity, limitPrice, handleOnTickerOnChange, handleCompanyNameChange,
     handleOrderNatureChange, handleOrderTypeChange, handleOnQuantityChange,
     handleOnSetLimitPriceChange, handleSubmit } =
-  OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersResponse } as IOrderPageContainerProps);
+  OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersResponse, getAllStocksResponse } as IOrderPageContainerProps);
   return (
     <OrderPageContainerWrapper>
       <HorizontallyCenterContainer>
@@ -103,6 +103,9 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
                     <StockText>{stock.current_price}</StockText>
                     <StockText>{stock.initial_price}</StockText>
                     <StockText>{stock.volume}</StockText>
+                    <StockText>{stock.todays_max_price}</StockText>
+                    <StockText>{stock.todays_min_price}</StockText>
+                    <StockText>{stock.todays_open_price}</StockText>
                   </HorizontalContainer>
                 </Alert>
               ))}
