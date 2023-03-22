@@ -11,6 +11,7 @@ import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import NavigationBar from "../../layout/navigationBar";
 
 
 const UserHomePageContainerWrapper = styled.div`
@@ -68,9 +69,6 @@ const SpinnerComponent = styled.div`
 export interface IUserHomePageContainerProps {
   getUserStocks: typeof getUserStocks;
   getUserStocksResponse: State<userStock[]>;
-  
-
-
 }
 
 const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
@@ -81,6 +79,7 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
   UserHomePageContainerLogic({ getUserStocks } as IUserHomePageContainerProps);
   return (
     <UserHomePageContainerWrapper>
+      <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
 

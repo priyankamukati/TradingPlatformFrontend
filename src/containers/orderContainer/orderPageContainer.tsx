@@ -12,6 +12,7 @@ import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { saveOrder } from "../../store/saveOrder.slice";
+import NavigationBar from "../../layout/navigationBar";
 
 const OrderPageContainerWrapper = styled.div`
   display: flex;
@@ -83,6 +84,7 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
   OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersResponse, getAllStocksResponse } as IOrderPageContainerProps);
   return (
     <OrderPageContainerWrapper>
+      <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
 

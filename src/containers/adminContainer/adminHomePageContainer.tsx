@@ -11,6 +11,7 @@ import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { saveStock } from "../../store/saveStock.slice";
+import NavigationBar from "../../layout/navigationBar";
 
 const AdminHomePageContainerWrapper = styled.div`
   display: flex;
@@ -80,6 +81,7 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
   AdminHomePageContainerLogic({ getAllStocks, saveStock, saveStocksResponse } as IAdminHomePageContainerProps);
   return (
     <AdminHomePageContainerWrapper>
+      <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
 

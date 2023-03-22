@@ -13,6 +13,7 @@ import Button from "react-bootstrap/Button";
 import { userInfo } from "os";
 import { saveUserCashBalance } from "../../store/saveBalance.slice";
 import { UpdateUserCashBalance } from "../../model/UpdateUserCashBalance";
+import NavigationBar from "../../layout/navigationBar";
 
 
 const UserCashBalancePageContainerWrapper = styled.div`
@@ -84,6 +85,7 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
   const {handleOnCashBalanceOnChange,handleDeposit, handleWithdraw} =UserCashBalancePageContainerLogic({ getUserCashBalance,saveUserCashBalance,saveUserCashBalanceResponse } as IUserCashBalancePageContainerProps);
   return (
     <UserCashBalancePageContainerWrapper>
+      <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
 

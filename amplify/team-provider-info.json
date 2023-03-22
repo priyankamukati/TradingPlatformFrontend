@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tradingplatformfront-dev-231956-authRole",
+      "UnauthRoleArn": "arn:aws:iam::381996088334:role/amplify-tradingplatformfront-dev-231956-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::381996088334:role/amplify-tradingplatformfront-dev-231956-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-tradingplatformfront-dev-231956-deployment",
+      "UnauthRoleName": "amplify-tradingplatformfront-dev-231956-unauthRole",
+      "StackName": "amplify-tradingplatformfront-dev-231956",
+      "StackId": "arn:aws:cloudformation:us-east-1:381996088334:stack/amplify-tradingplatformfront-dev-231956/674dd900-c7b0-11ed-9bd3-0ee7caec98c9",
+      "AmplifyAppId": "dgvg2kzw45867"
+    },
+    "categories": {
+      "auth": {
+        "tradingplatformfront214a4eef": {}
+      }
+    }
+  }
+}

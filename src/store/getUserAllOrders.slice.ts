@@ -5,7 +5,7 @@ import api from './api'
 
 
 export const getUserAllOrders = createAsyncThunk('getUserAllOrders', async () => {
-  let url = API_SERVICE_URL + appURL.getUserAllOrdersURL+"/1";
+  let url = API_SERVICE_URL + appURL.getUserAllOrdersURL;
   return await api.get(url);
 });
 

@@ -7,5 +7,6 @@ export const appURL = {
     "getUserAllOrdersURL" : "/api/userOrder",
     "saveOrderURL" : "/api/userOrder",
     "getUserCashBalanceURL" : "/api/usercashbalance",
-    "saveUserCashBalanceURL" : "/api/usercashbalance"
+    "saveUserCashBalanceURL" : "/api/usercashbalance",
+    "saveUserInfoURL" : "/api/userinfo"
 }

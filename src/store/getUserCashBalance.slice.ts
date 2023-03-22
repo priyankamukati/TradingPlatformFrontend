@@ -5,7 +5,7 @@ import api from './api'
 
 
 export const getUserCashBalance = createAsyncThunk('getUserCashBalance', async () => {
-  let url = API_SERVICE_URL + appURL.getUserCashBalanceURL + "/1";
+  let url = API_SERVICE_URL + appURL.getUserCashBalanceURL;
   return await api.get(url);
 });
 

@@ -12,6 +12,11 @@ import OrderPageContainer from './containers/orderContainer/orderPageContainer';
 import UserOrdersViewPageContainer from './containers/userOrdersViewContainer/userOrdersViewPageContainer';
 import UserCashBalancePageContainer from './containers/userCashBalanceContainer/userCashBalancePageContainer';
 
+import { Amplify } from 'aws-amplify';
+import awsExports from './aws-exports-new';
+import LoginContainer from './containers/loginContainer/loginContainer';
+import UserInfoPageContainer from './containers/userInfoContainer/userInfoPageContainer';
+Amplify.configure(awsExports);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,11 +26,13 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
       <Routes>
+      <Route path ="/login" element={<LoginContainer/>} />
         <Route path ="/admin" element={<AdminHomePageContainer/>} />
         <Route path ="/" element={<UserHomePageContainer/>} />
         <Route path ="/userorder" element={<OrderPageContainer/>} />
         <Route path ="/userallorder" element={<UserOrdersViewPageContainer/>} />
         <Route path ="/usercashbalance" element={<UserCashBalancePageContainer/>} />
+        <Route path ="/userinfo" element={<UserInfoPageContainer/>} />
        </Routes>
       </BrowserRouter>
     </Provider>

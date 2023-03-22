@@ -11,6 +11,7 @@ import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import NavigationBar from "../../layout/navigationBar";
 
 
 const UserOrdersViewPageContainerWrapper = styled.div`
@@ -80,6 +81,7 @@ const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContaine
   UserOrdersViewPageContainerLogic({ getUserAllOrders,} as IUserOrdersViewPageContainerProps);
   return (
     <UserOrdersViewPageContainerWrapper>
+      <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
 

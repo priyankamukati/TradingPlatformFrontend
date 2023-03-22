@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { API_SERVICE_URL, appURL } from '../config';
 import { LoadingState } from '../model/loadingState';
+import { SaveUserInfo, UserInfo } from '../model/userInfo';
 import api from './api'
 
 
-export const getUserStocks = createAsyncThunk('getUserStocks', async () => {
-  let url = API_SERVICE_URL + appURL.getUserStocksURL;
-  return await api.get(url);
+export const saveUserInfo = createAsyncThunk('saveUserInfo', async (saveUserInfoRequest: UserInfo) => {
+  let url = API_SERVICE_URL + appURL.saveUserInfoURL;
+  return await api.post(url, saveUserInfoRequest);
 });
 
 const initialState = {
@@ -16,23 +17,23 @@ const initialState = {
 };
 
 // Then, handle actions in your reducers:
-const getUserStocksSlice = createSlice({
-  name: 'getUserStocks',
+const saveUserInfoSlice = createSlice({
+  name: 'saveUserInfo',
   initialState,
   reducers: {},
   extraReducers: {
-    [getUserStocks.pending.type]: (state, _) => {
+    [saveUserInfo.pending.type]: (state, _) => {
       if (state.loading === LoadingState.Idle) {
         state.loading = LoadingState.Pending;
       }
     },
-    [getUserStocks.fulfilled.type]: (state, action) => {
+    [saveUserInfo.fulfilled.type]: (state, action) => {
       if (state.loading === LoadingState.Pending) {
         state.loading = LoadingState.Idle;
         state.data = action.payload.data;
       }
     },
-    [getUserStocks.rejected.type]: (state, action) => {
+    [saveUserInfo.rejected.type]: (state, action) => {
       if (state.loading === LoadingState.Pending) {
         state.loading = LoadingState.Idle;
         state.error = action.error;
@@ -41,4 +42,4 @@ const getUserStocksSlice = createSlice({
   },
 });
 
-export const getUserStocksReducer = getUserStocksSlice.reducer;
+export const saveUserInfoReducer = saveUserInfoSlice.reducer;

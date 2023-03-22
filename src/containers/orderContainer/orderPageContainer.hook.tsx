@@ -63,7 +63,6 @@ export function OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersRes
       const stock = getAllStocksResponse.data?.map((stock) => { if (stock.ticker === ticker) return stock; })[0];
   if (stock) {
     const saveOrderRequest = new Order();
-    saveOrderRequest.user_id = 1;
     saveOrderRequest.stock_id = stock.id;
     saveOrderRequest.ticker = ticker;
     saveOrderRequest.company_name = companyName;

@@ -26,7 +26,6 @@ export function UserCashBalancePageContainerLogic({getUserCashBalance,saveUserCa
     if(cashBalance!=undefined) {
       const saveUserCashBalanceRequest = new UpdateUserCashBalance();
      
-      saveUserCashBalanceRequest.user_id = 1;
       saveUserCashBalanceRequest.amount = cashBalance;
   
       saveUserCashBalance(saveUserCashBalanceRequest)
@@ -38,7 +37,6 @@ export function UserCashBalancePageContainerLogic({getUserCashBalance,saveUserCa
     if(cashBalance!=undefined) {
       const saveUserCashBalanceRequest = new UpdateUserCashBalance();
      
-      saveUserCashBalanceRequest.user_id = 1;
       saveUserCashBalanceRequest.amount = (-1)*cashBalance;
   
       saveUserCashBalance(saveUserCashBalanceRequest)
