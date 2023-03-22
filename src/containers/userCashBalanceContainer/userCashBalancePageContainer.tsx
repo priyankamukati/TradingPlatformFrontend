@@ -15,7 +15,6 @@ import { saveUserCashBalance } from "../../store/saveBalance.slice";
 import { UpdateUserCashBalance } from "../../model/UpdateUserCashBalance";
 import NavigationBar from "../../layout/navigationBar";
 
-
 const UserCashBalancePageContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
@@ -49,12 +48,10 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-
 const SaveStockContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
-
 
 const StockText = styled.div`
   display: flex;
@@ -78,17 +75,28 @@ export interface IUserCashBalancePageContainerProps {
 
 const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContainerProps> & {
   defaultProps: Partial<IUserCashBalancePageContainerProps>;
-} = ({ getUserCashBalance, getUserCashBalanceResponse,saveUserCashBalance,saveUserCashBalanceResponse}: IUserCashBalancePageContainerProps) => {
+} = ({
+  getUserCashBalance,
+  getUserCashBalanceResponse,
+  saveUserCashBalance,
+  saveUserCashBalanceResponse,
+}: IUserCashBalancePageContainerProps) => {
+  console.log(
+    "getUserCashBalanceResponse: ",
+    getUserCashBalanceResponse.data?.cash_balance
+  );
 
-  console.log("getUserCashBalanceResponse: ", getUserCashBalanceResponse.data?.cash_balance)
-  
-  const {handleOnCashBalanceOnChange,handleDeposit, handleWithdraw} =UserCashBalancePageContainerLogic({ getUserCashBalance,saveUserCashBalance,saveUserCashBalanceResponse } as IUserCashBalancePageContainerProps);
+  const { handleOnCashBalanceOnChange, handleDeposit, handleWithdraw } =
+    UserCashBalancePageContainerLogic({
+      getUserCashBalance,
+      saveUserCashBalance,
+      saveUserCashBalanceResponse,
+    } as IUserCashBalancePageContainerProps);
   return (
     <UserCashBalancePageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-
           <GetStockContainer>
             <SpinnerComponent>
               {getUserCashBalanceResponse.loading === LoadingState.Pending ? (
@@ -98,14 +106,13 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
               )}
             </SpinnerComponent>
             <VerticalContainer>
-              
-                <Alert key={"success"} variant={"success"}>
-                  <HorizontalContainer>
-                    <StockText>{getUserCashBalanceResponse.data?.cash_balance}</StockText>
-
-                  </HorizontalContainer>
-                </Alert>
-              
+              <Alert key={"success"} variant={"success"}>
+                <HorizontalContainer>
+                  <StockText>
+                    {getUserCashBalanceResponse.data?.cash_balance}
+                  </StockText>
+                </HorizontalContainer>
+              </Alert>
             </VerticalContainer>
             {getUserCashBalanceResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
@@ -116,25 +123,27 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
             )}
           </GetStockContainer>
           <Form>
-          <Form.Group className="mb-3" controlId="formBasic">
-          <Form.Label>Enter Amount</Form.Label>
-          <Form.Control type="text" placeholder="Enter deposit/withdraw amount" onChange={handleOnCashBalanceOnChange}/>
-          </Form.Group>
-
-
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-      
-          </Form.Group>
-          <Button variant="primary" type="submit" onClick={handleDeposit}>
-           Deposit
-           </Button>{' '}
-           <Button variant="primary" type="submit" onClick={handleWithdraw}>
-           Withdraw
-          </Button>
-      
+            <Form.Group className="mb-3" controlId="formBasic">
+              <Form.Label>Enter Amount</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter deposit/withdraw amount"
+                onChange={handleOnCashBalanceOnChange}
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="formBasicCheckbox"
+            ></Form.Group>
+            <Button variant="primary" type="submit" onClick={handleDeposit}>
+              Deposit
+            </Button>{" "}
+            <Button variant="primary" type="submit" onClick={handleWithdraw}>
+              Withdraw
+            </Button>
           </Form>
           <SaveStockContainer>
-          <SpinnerComponent>
+            <SpinnerComponent>
               {saveUserCashBalanceResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
               ) : (
@@ -142,9 +151,7 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
               )}
             </SpinnerComponent>
             <Form>
-              <HorizontallyCenterContainer>
-              </HorizontallyCenterContainer>
-
+              <HorizontallyCenterContainer></HorizontallyCenterContainer>
             </Form>
             {saveUserCashBalanceResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
@@ -154,10 +161,6 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
               <div></div>
             )}
           </SaveStockContainer>
-
-          
-
-
         </VerticalContainer>
       </HorizontallyCenterContainer>
     </UserCashBalancePageContainerWrapper>
@@ -169,15 +172,15 @@ UserCashBalancePageContainer.defaultProps = {};
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getUserCashBalance: () => dispatch(getUserCashBalance()),
-    saveUserCashBalance: (saveUserCashBalanceRequest: UpdateUserCashBalance) => dispatch(saveUserCashBalance(saveUserCashBalanceRequest))
-    
+    saveUserCashBalance: (saveUserCashBalanceRequest: UpdateUserCashBalance) =>
+      dispatch(saveUserCashBalance(saveUserCashBalanceRequest)),
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
     getUserCashBalanceResponse: state.getUserCashBalanceReducer,
-    saveUserCashBalanceResponse: state.saveUserCashBalanceReducer
+    saveUserCashBalanceResponse: state.saveUserCashBalanceReducer,
   };
 };
 

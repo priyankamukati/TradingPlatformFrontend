@@ -1,4 +1,4 @@
 export enum LoadingState {
-    Idle = 'idle',
-    Pending = 'pending'
+  Idle = "idle",
+  Pending = "pending",
 }

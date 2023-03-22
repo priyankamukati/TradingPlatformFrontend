@@ -13,7 +13,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import NavigationBar from "../../layout/navigationBar";
 
-
 const UserOrdersViewPageContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
@@ -47,12 +46,10 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-
 const SaveStockContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
-
 
 const StockText = styled.div`
   display: flex;
@@ -69,22 +66,22 @@ const SpinnerComponent = styled.div`
 export interface IUserOrdersViewPageContainerProps {
   getUserAllOrders: typeof getUserAllOrders;
   getUserAllOrdersResponse: State<Order[]>;
-
-
 }
 
 const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContainerProps> & {
   defaultProps: Partial<IUserOrdersViewPageContainerProps>;
-} = ({ getUserAllOrders, getUserAllOrdersResponse}: IUserOrdersViewPageContainerProps) => {
-
- 
-  UserOrdersViewPageContainerLogic({ getUserAllOrders,} as IUserOrdersViewPageContainerProps);
+} = ({
+  getUserAllOrders,
+  getUserAllOrdersResponse,
+}: IUserOrdersViewPageContainerProps) => {
+  UserOrdersViewPageContainerLogic({
+    getUserAllOrders,
+  } as IUserOrdersViewPageContainerProps);
   return (
     <UserOrdersViewPageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-
           <GetStockContainer>
             <SpinnerComponent>
               {getUserAllOrdersResponse.loading === LoadingState.Pending ? (
@@ -117,8 +114,6 @@ const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContaine
               <div></div>
             )}
           </GetStockContainer>
-
- 
         </VerticalContainer>
       </HorizontallyCenterContainer>
     </UserOrdersViewPageContainerWrapper>
@@ -136,7 +131,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 const mapStateToProps = (state: any) => {
   return {
     getUserAllOrdersResponse: state.getUserAllOrdersReducer,
-
   };
 };
 

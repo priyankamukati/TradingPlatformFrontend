@@ -47,12 +47,10 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-
 const SaveOrderContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
-
 
 const StockText = styled.div`
   display: flex;
@@ -76,18 +74,37 @@ export interface IOrderPageContainerProps {
 
 const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
   defaultProps: Partial<IOrderPageContainerProps>;
-} = ({ getAllStocks, getAllStocksResponse, saveOrder, saveOrdersResponse }: IOrderPageContainerProps) => {
-
-  const { ticker, companyName, orderNature, orderType,quantity, limitPrice, handleOnTickerOnChange, handleCompanyNameChange,
-    handleOrderNatureChange, handleOrderTypeChange, handleOnQuantityChange,
-    handleOnSetLimitPriceChange, handleSubmit } =
-  OrderPageContainerLogic({ getAllStocks, saveOrder, saveOrdersResponse, getAllStocksResponse } as IOrderPageContainerProps);
+} = ({
+  getAllStocks,
+  getAllStocksResponse,
+  saveOrder,
+  saveOrdersResponse,
+}: IOrderPageContainerProps) => {
+  const {
+    ticker,
+    companyName,
+    orderNature,
+    orderType,
+    quantity,
+    limitPrice,
+    handleOnTickerOnChange,
+    handleCompanyNameChange,
+    handleOrderNatureChange,
+    handleOrderTypeChange,
+    handleOnQuantityChange,
+    handleOnSetLimitPriceChange,
+    handleSubmit,
+  } = OrderPageContainerLogic({
+    getAllStocks,
+    saveOrder,
+    saveOrdersResponse,
+    getAllStocksResponse,
+  } as IOrderPageContainerProps);
   return (
     <OrderPageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-
           <GetStockContainer>
             <SpinnerComponent>
               {getAllStocksResponse.loading === LoadingState.Pending ? (
@@ -122,7 +139,7 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
           </GetStockContainer>
 
           <SaveOrderContainer>
-          <SpinnerComponent>
+            <SpinnerComponent>
               {saveOrdersResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
               ) : (
@@ -133,36 +150,72 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
               <HorizontallyCenterContainer>
                 <Form.Group className="mb-3" controlId="formStockTicker">
                   <Form.Label>Stock Ticker</Form.Label>
-                  <Form.Control value={ticker} type="input" placeholder="AAPL" required onChange={handleOnTickerOnChange} />
+                  <Form.Control
+                    value={ticker}
+                    type="input"
+                    placeholder="AAPL"
+                    required
+                    onChange={handleOnTickerOnChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockCompanyName">
                   <Form.Label>Company Name</Form.Label>
-                  <Form.Control value={companyName} type="input" placeholder="Apple Inc" required onChange={handleCompanyNameChange} />
+                  <Form.Control
+                    value={companyName}
+                    type="input"
+                    placeholder="Apple Inc"
+                    required
+                    onChange={handleCompanyNameChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockInitialPrice">
                   <Form.Label>Order Nature</Form.Label>
-                  <Form.Control value={orderNature} type="input" placeholder="Buy/Sell" required onChange={handleOrderNatureChange} />
+                  <Form.Control
+                    value={orderNature}
+                    type="input"
+                    placeholder="Buy/Sell"
+                    required
+                    onChange={handleOrderNatureChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockQuantity">
                   <Form.Label>Order Type</Form.Label>
-                  <Form.Control value={orderType} type="input" placeholder="Limit/Market" required onChange={handleOrderTypeChange} />
+                  <Form.Control
+                    value={orderType}
+                    type="input"
+                    placeholder="Limit/Market"
+                    required
+                    onChange={handleOrderTypeChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockQuantity">
                   <Form.Label>Limit Price</Form.Label>
-                  <Form.Control value={limitPrice} type="input" placeholder="0" required onChange={handleOnSetLimitPriceChange} />
+                  <Form.Control
+                    value={limitPrice}
+                    type="input"
+                    placeholder="0"
+                    required
+                    onChange={handleOnSetLimitPriceChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockQuantity">
                   <Form.Label>Quantity</Form.Label>
-                  <Form.Control value={quantity} type="input" placeholder="0" required onChange={handleOnQuantityChange} />
+                  <Form.Control
+                    value={quantity}
+                    type="input"
+                    placeholder="0"
+                    required
+                    onChange={handleOnQuantityChange}
+                  />
                 </Form.Group>
               </HorizontallyCenterContainer>
 
-              <Button variant="primary" type="submit" onClick={handleSubmit} >
+              <Button variant="primary" type="submit" onClick={handleSubmit}>
                 Save
               </Button>
             </Form>
@@ -185,7 +238,8 @@ OrderPageContainer.defaultProps = {};
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getAllStocks: () => dispatch(getAllStocks()),
-    saveOrder: (saveOrderRequest: Order) => dispatch(saveOrder(saveOrderRequest)),
+    saveOrder: (saveOrderRequest: Order) =>
+      dispatch(saveOrder(saveOrderRequest)),
   };
 };
 

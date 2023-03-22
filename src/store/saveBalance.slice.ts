@@ -1,15 +1,17 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_SERVICE_URL, appURL } from '../config';
-import { LoadingState } from '../model/loadingState';
-import { UpdateUserCashBalance } from '../model/UpdateUserCashBalance';
-import { UserInfo } from '../model/userInfo';
-import api from './api'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { API_SERVICE_URL, appURL } from "../config";
+import { LoadingState } from "../model/loadingState";
+import { UpdateUserCashBalance } from "../model/UpdateUserCashBalance";
+import { UserInfo } from "../model/userInfo";
+import api from "./api";
 
-
-export const saveUserCashBalance = createAsyncThunk('saveUserCashBalance', async (saveUserCashBalanceRequest: UpdateUserCashBalance) => {
-  let url = API_SERVICE_URL + appURL.saveUserCashBalanceURL;
-  return await api.post(url, saveUserCashBalanceRequest);
-});
+export const saveUserCashBalance = createAsyncThunk(
+  "saveUserCashBalance",
+  async (saveUserCashBalanceRequest: UpdateUserCashBalance) => {
+    let url = API_SERVICE_URL + appURL.saveUserCashBalanceURL;
+    return await api.post(url, saveUserCashBalanceRequest);
+  }
+);
 
 const initialState = {
   data: null,
@@ -19,7 +21,7 @@ const initialState = {
 
 // Then, handle actions in your reducers:
 const saveUserCashBalanceSlice = createSlice({
-  name: 'saveUserCashBalance',
+  name: "saveUserCashBalance",
   initialState,
   reducers: {},
   extraReducers: {

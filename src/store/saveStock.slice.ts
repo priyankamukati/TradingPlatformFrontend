@@ -1,14 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_SERVICE_URL, appURL } from '../config';
-import { LoadingState } from '../model/loadingState';
-import { Stock } from '../model/stock';
-import api from './api'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { API_SERVICE_URL, appURL } from "../config";
+import { LoadingState } from "../model/loadingState";
+import { Stock } from "../model/stock";
+import api from "./api";
 
-
-export const saveStock = createAsyncThunk('saveStock', async (saveStockRequest: Stock) => {
-  let url = API_SERVICE_URL + appURL.saveStockURL;
-  return await api.post(url, saveStockRequest);
-});
+export const saveStock = createAsyncThunk(
+  "saveStock",
+  async (saveStockRequest: Stock) => {
+    let url = API_SERVICE_URL + appURL.saveStockURL;
+    return await api.post(url, saveStockRequest);
+  }
+);
 
 const initialState = {
   data: null,
@@ -18,7 +20,7 @@ const initialState = {
 
 // Then, handle actions in your reducers:
 const saveStockSlice = createSlice({
-  name: 'saveStock',
+  name: "saveStock",
   initialState,
   reducers: {},
   extraReducers: {

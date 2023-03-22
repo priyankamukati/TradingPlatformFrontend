@@ -1,14 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_SERVICE_URL, appURL } from '../config';
-import { LoadingState } from '../model/loadingState';
-import { SaveUserInfo, UserInfo } from '../model/userInfo';
-import api from './api'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { API_SERVICE_URL, appURL } from "../config";
+import { LoadingState } from "../model/loadingState";
+import { SaveUserInfo, UserInfo } from "../model/userInfo";
+import api from "./api";
 
-
-export const saveUserInfo = createAsyncThunk('saveUserInfo', async (saveUserInfoRequest: UserInfo) => {
-  let url = API_SERVICE_URL + appURL.saveUserInfoURL;
-  return await api.post(url, saveUserInfoRequest);
-});
+export const saveUserInfo = createAsyncThunk(
+  "saveUserInfo",
+  async (saveUserInfoRequest: UserInfo) => {
+    let url = API_SERVICE_URL + appURL.saveUserInfoURL;
+    return await api.post(url, saveUserInfoRequest);
+  }
+);
 
 const initialState = {
   data: null,
@@ -18,7 +20,7 @@ const initialState = {
 
 // Then, handle actions in your reducers:
 const saveUserInfoSlice = createSlice({
-  name: 'saveUserInfo',
+  name: "saveUserInfo",
   initialState,
   reducers: {},
   extraReducers: {

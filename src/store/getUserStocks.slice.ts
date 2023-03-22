@@ -1,10 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_SERVICE_URL, appURL } from '../config';
-import { LoadingState } from '../model/loadingState';
-import api from './api'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { API_SERVICE_URL, appURL } from "../config";
+import { LoadingState } from "../model/loadingState";
+import api from "./api";
 
-
-export const getUserStocks = createAsyncThunk('getUserStocks', async () => {
+export const getUserStocks = createAsyncThunk("getUserStocks", async () => {
   let url = API_SERVICE_URL + appURL.getUserStocksURL;
   return await api.get(url);
 });
@@ -17,7 +16,7 @@ const initialState = {
 
 // Then, handle actions in your reducers:
 const getUserStocksSlice = createSlice({
-  name: 'getUserStocks',
+  name: "getUserStocks",
   initialState,
   reducers: {},
   extraReducers: {

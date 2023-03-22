@@ -1,13 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_SERVICE_URL, appURL } from '../config';
-import { LoadingState } from '../model/loadingState';
-import api from './api'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { API_SERVICE_URL, appURL } from "../config";
+import { LoadingState } from "../model/loadingState";
+import api from "./api";
 
-
-export const getUserCashBalance = createAsyncThunk('getUserCashBalance', async () => {
-  let url = API_SERVICE_URL + appURL.getUserCashBalanceURL;
-  return await api.get(url);
-});
+export const getUserCashBalance = createAsyncThunk(
+  "getUserCashBalance",
+  async () => {
+    let url = API_SERVICE_URL + appURL.getUserCashBalanceURL;
+    return await api.get(url);
+  }
+);
 
 const initialState = {
   data: null,
@@ -17,7 +19,7 @@ const initialState = {
 
 // Then, handle actions in your reducers:
 const getUserCashBalanceSlice = createSlice({
-  name: 'getUserCashBalance',
+  name: "getUserCashBalance",
   initialState,
   reducers: {},
   extraReducers: {

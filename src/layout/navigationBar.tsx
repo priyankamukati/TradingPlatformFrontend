@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { FunctionComponent, useEffect } from "react";
 import { Auth } from "aws-amplify";
-import { withAuthenticator, WithAuthenticatorProps } from "@aws-amplify/ui-react";
+import {
+  withAuthenticator,
+  WithAuthenticatorProps,
+} from "@aws-amplify/ui-react";
 
 const AdminHomePageContainerWrapper = styled.div`
   display: flex;
@@ -14,7 +17,6 @@ const VerticalContainer = styled.div`
   flex-direction: column;
 `;
 
-
 const HorizontallyCenterContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -22,37 +24,36 @@ const HorizontallyCenterContainer = styled.div`
   flex-grow: 1;
 `;
 
-
 export interface INavigationBarProps extends WithAuthenticatorProps {}
 
-const NavigationBar: FunctionComponent<INavigationBarProps> 
-= ({ signOut, user }: INavigationBarProps) => {
-
+const NavigationBar: FunctionComponent<INavigationBarProps> = ({
+  signOut,
+  user,
+}: INavigationBarProps) => {
   const GetSignInInfo = async () => {
     try {
-        
-        const response = await Auth.currentSession();
-        let accessToken = response.getAccessToken();
-        const access_token = accessToken.getJwtToken();
+      const response = await Auth.currentSession();
+      let accessToken = response.getAccessToken();
+      const access_token = accessToken.getJwtToken();
     } catch (err) {
-        console.log('are you signed in? ' + err)
-       // Auth.federatedSignIn()
+      console.log("are you signed in? " + err);
+      // Auth.federatedSignIn()
     }
-}
+  };
 
-    useEffect(() => {
-        GetSignInInfo()
-    },[])
+  useEffect(() => {
+    GetSignInInfo();
+  }, []);
 
   return (
     <AdminHomePageContainerWrapper>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-        <button onClick={signOut}>Sign out</button>
+          <button onClick={signOut}>Sign out</button>
         </VerticalContainer>
       </HorizontallyCenterContainer>
     </AdminHomePageContainerWrapper>
   );
-  }
+};
 
 export default NavigationBar;

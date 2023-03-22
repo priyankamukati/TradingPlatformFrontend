@@ -13,7 +13,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import NavigationBar from "../../layout/navigationBar";
 
-
 const UserHomePageContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
@@ -47,12 +46,10 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-
 const SaveStockContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
-
 
 const StockText = styled.div`
   display: flex;
@@ -73,16 +70,13 @@ export interface IUserHomePageContainerProps {
 
 const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
   defaultProps: Partial<IUserHomePageContainerProps>;
-} = ({ getUserStocks, getUserStocksResponse}: IUserHomePageContainerProps) => {
-
-  
+} = ({ getUserStocks, getUserStocksResponse }: IUserHomePageContainerProps) => {
   UserHomePageContainerLogic({ getUserStocks } as IUserHomePageContainerProps);
   return (
     <UserHomePageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-
           <GetStockContainer>
             <SpinnerComponent>
               {getUserStocksResponse.loading === LoadingState.Pending ? (
@@ -96,7 +90,7 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
                 <Alert key={"success"} variant={"success"}>
                   <HorizontalContainer>
                     <StockText>{user_stock.ticker}</StockText>
-                    <StockText>{user_stock.company_name}</StockText>                   
+                    <StockText>{user_stock.company_name}</StockText>
                     <StockText>{user_stock.quantity}</StockText>
                     <StockText>{user_stock.current_price}</StockText>
                   </HorizontalContainer>
@@ -111,10 +105,6 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
               <div></div>
             )}
           </GetStockContainer>
-
-          
-
-
         </VerticalContainer>
       </HorizontallyCenterContainer>
     </UserHomePageContainerWrapper>
@@ -126,14 +116,12 @@ UserHomePageContainer.defaultProps = {};
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getUserStocks: () => dispatch(getUserStocks()),
-    
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
-    getUserStocksResponse: state.getUserStocksReducer
-
+    getUserStocksResponse: state.getUserStocksReducer,
   };
 };
 

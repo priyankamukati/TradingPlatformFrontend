@@ -46,12 +46,10 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-
 const SaveStockContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
-
 
 const StockText = styled.div`
   display: flex;
@@ -75,16 +73,32 @@ export interface IAdminHomePageContainerProps {
 
 const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & {
   defaultProps: Partial<IAdminHomePageContainerProps>;
-} = ({ getAllStocks, getAllStocksResponse, saveStock, saveStocksResponse }: IAdminHomePageContainerProps) => {
-
-  const { ticker, companyName, initialPrice, volume, handleOnTickerOnChange, handleCompanyNameChange, handleOnInitialPriceChange, handleOnVolumeChange, handleSubmit } =
-  AdminHomePageContainerLogic({ getAllStocks, saveStock, saveStocksResponse } as IAdminHomePageContainerProps);
+} = ({
+  getAllStocks,
+  getAllStocksResponse,
+  saveStock,
+  saveStocksResponse,
+}: IAdminHomePageContainerProps) => {
+  const {
+    ticker,
+    companyName,
+    initialPrice,
+    volume,
+    handleOnTickerOnChange,
+    handleCompanyNameChange,
+    handleOnInitialPriceChange,
+    handleOnVolumeChange,
+    handleSubmit,
+  } = AdminHomePageContainerLogic({
+    getAllStocks,
+    saveStock,
+    saveStocksResponse,
+  } as IAdminHomePageContainerProps);
   return (
     <AdminHomePageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
-
           <GetStockContainer>
             <SpinnerComponent>
               {getAllStocksResponse.loading === LoadingState.Pending ? (
@@ -116,7 +130,7 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
           </GetStockContainer>
 
           <SaveStockContainer>
-          <SpinnerComponent>
+            <SpinnerComponent>
               {saveStocksResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
               ) : (
@@ -127,26 +141,50 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
               <HorizontallyCenterContainer>
                 <Form.Group className="mb-3" controlId="formStockTicker">
                   <Form.Label>Stock Ticker</Form.Label>
-                  <Form.Control value={ticker} type="input" placeholder="AAPL" required onChange={handleOnTickerOnChange} />
+                  <Form.Control
+                    value={ticker}
+                    type="input"
+                    placeholder="AAPL"
+                    required
+                    onChange={handleOnTickerOnChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockCompanyName">
                   <Form.Label>Company Name</Form.Label>
-                  <Form.Control value={companyName} type="input" placeholder="Apple Inc" required onChange={handleCompanyNameChange} />
+                  <Form.Control
+                    value={companyName}
+                    type="input"
+                    placeholder="Apple Inc"
+                    required
+                    onChange={handleCompanyNameChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockInitialPrice">
                   <Form.Label>Initial Price</Form.Label>
-                  <Form.Control value={initialPrice} type="input" placeholder="50" required onChange={handleOnInitialPriceChange} />
+                  <Form.Control
+                    value={initialPrice}
+                    type="input"
+                    placeholder="50"
+                    required
+                    onChange={handleOnInitialPriceChange}
+                  />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockQuantity">
                   <Form.Label>Volume</Form.Label>
-                  <Form.Control value={volume} type="input" placeholder="1000" required onChange={handleOnVolumeChange} />
+                  <Form.Control
+                    value={volume}
+                    type="input"
+                    placeholder="1000"
+                    required
+                    onChange={handleOnVolumeChange}
+                  />
                 </Form.Group>
               </HorizontallyCenterContainer>
 
-              <Button variant="primary" type="submit" onClick={handleSubmit} >
+              <Button variant="primary" type="submit" onClick={handleSubmit}>
                 Save
               </Button>
             </Form>
@@ -169,7 +207,8 @@ AdminHomePageContainer.defaultProps = {};
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getAllStocks: () => dispatch(getAllStocks()),
-    saveStock: (saveStockRequest: Stock) => dispatch(saveStock(saveStockRequest)),
+    saveStock: (saveStockRequest: Stock) =>
+      dispatch(saveStock(saveStockRequest)),
   };
 };
 
