@@ -12,6 +12,9 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { saveStock } from "../../store/saveStock.slice";
 import NavigationBar from "../../layout/navigationBar";
+import AdminNavigationBar from "../../layout/adminNavigationBar";
+import { getUserInfo, getUserInfoReducer } from "../../store/getUserInfo.slice";
+import { GetUserInfo, UserInfo } from "../../model/userInfo";
 
 const AdminHomePageContainerWrapper = styled.div`
   display: flex;
@@ -63,12 +66,30 @@ const SpinnerComponent = styled.div`
   justify-content: center;
 `;
 
+const VerticalCenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  height:100rem;
+`;
+
+const TextContent  = styled.div`
+  display: flex;
+  margin-left: 0.25rem;
+  font-size: 2rem;
+`;
+
+
 export interface IAdminHomePageContainerProps {
   getAllStocks: typeof getAllStocks;
   getAllStocksResponse: State<Stock[]>;
 
   saveStock: typeof saveStock;
   saveStocksResponse: State<Stock[]>;
+
+  getUserInfo: typeof getUserInfo;
+  getUserInfoResponse: State<GetUserInfo>;
 }
 
 const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & {
@@ -78,129 +99,154 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
   getAllStocksResponse,
   saveStock,
   saveStocksResponse,
+  getUserInfo,
+  getUserInfoResponse
 }: IAdminHomePageContainerProps) => {
-  const {
-    ticker,
-    companyName,
-    initialPrice,
-    volume,
-    handleOnTickerOnChange,
-    handleCompanyNameChange,
-    handleOnInitialPriceChange,
-    handleOnVolumeChange,
-    handleSubmit,
-  } = AdminHomePageContainerLogic({
-    getAllStocks,
-    saveStock,
-    saveStocksResponse,
-  } as IAdminHomePageContainerProps);
-  return (
-    <AdminHomePageContainerWrapper>
-      <NavigationBar></NavigationBar>
+    const {
+      ticker,
+      companyName,
+      initialPrice,
+      volume,
+      handleOnTickerOnChange,
+      handleCompanyNameChange,
+      handleOnInitialPriceChange,
+      handleOnVolumeChange,
+      handleSubmit,
+    } = AdminHomePageContainerLogic({
+      getAllStocks,
+      saveStock,
+      saveStocksResponse,
+      getUserInfo,
+      getUserInfoResponse
+    } as IAdminHomePageContainerProps);
+
+
+    const noAdminContent =       <AdminHomePageContainerWrapper>
+    <AdminNavigationBar></AdminNavigationBar>
+    <VerticalCenterContainer>
       <HorizontallyCenterContainer>
-        <VerticalContainer>
-          <GetStockContainer>
-            <SpinnerComponent>
-              {getAllStocksResponse.loading === LoadingState.Pending ? (
-                <Spinner animation="border" variant="info" />
-              ) : (
-                <div></div>
-              )}
-            </SpinnerComponent>
-            <VerticalContainer>
-              {getAllStocksResponse.data?.map((stock) => (
-                <Alert key={"success"} variant={"success"}>
-                  <HorizontalContainer>
-                    <StockText>{stock.ticker}</StockText>
-                    <StockText>{stock.company_name}</StockText>
-                    <StockText>{stock.current_price}</StockText>
-                    <StockText>{stock.initial_price}</StockText>
-                    <StockText>{stock.volume}</StockText>
-                  </HorizontalContainer>
+        <TextContent>
+          User unauthorized: needs Admin access
+          </TextContent>
+          </HorizontallyCenterContainer>
+        </VerticalCenterContainer>
+        </AdminHomePageContainerWrapper>
+
+    const adminContent = (
+      <AdminHomePageContainerWrapper>
+        <AdminNavigationBar></AdminNavigationBar>
+        <HorizontallyCenterContainer>
+          <VerticalContainer>
+            <GetStockContainer>
+              <SpinnerComponent>
+                {getAllStocksResponse.loading === LoadingState.Pending ? (
+                  <Spinner animation="border" variant="info" />
+                ) : (
+                  <div></div>
+                )}
+              </SpinnerComponent>
+              <VerticalContainer>
+                {getAllStocksResponse.data?.map((stock) => (
+                  <Alert key={"success"} variant={"success"}>
+                    <HorizontalContainer>
+                      <StockText>{stock.ticker}</StockText>
+                      <StockText>{stock.company_name}</StockText>
+                      <StockText>{stock.current_price}</StockText>
+                      <StockText>{stock.initial_price}</StockText>
+                      <StockText>{stock.volume}</StockText>
+                    </HorizontalContainer>
+                  </Alert>
+                ))}
+              </VerticalContainer>
+              {getAllStocksResponse.error ? (
+                <Alert key={"danger"} variant={"danger"}>
+                  Error retrieving stocks data. Please try again!
                 </Alert>
-              ))}
-            </VerticalContainer>
-            {getAllStocksResponse.error ? (
-              <Alert key={"danger"} variant={"danger"}>
-                Error retrieving stocks data. Please try again!
-              </Alert>
-            ) : (
-              <div></div>
-            )}
-          </GetStockContainer>
-
-          <SaveStockContainer>
-            <SpinnerComponent>
-              {saveStocksResponse.loading === LoadingState.Pending ? (
-                <Spinner animation="border" variant="info" />
               ) : (
                 <div></div>
               )}
-            </SpinnerComponent>
-            <Form>
-              <HorizontallyCenterContainer>
-                <Form.Group className="mb-3" controlId="formStockTicker">
-                  <Form.Label>Stock Ticker</Form.Label>
-                  <Form.Control
-                    value={ticker}
-                    type="input"
-                    placeholder="AAPL"
-                    required
-                    onChange={handleOnTickerOnChange}
-                  />
-                </Form.Group>
+            </GetStockContainer>
 
-                <Form.Group className="mb-3" controlId="formStockCompanyName">
-                  <Form.Label>Company Name</Form.Label>
-                  <Form.Control
-                    value={companyName}
-                    type="input"
-                    placeholder="Apple Inc"
-                    required
-                    onChange={handleCompanyNameChange}
-                  />
-                </Form.Group>
+            <SaveStockContainer>
+              <SpinnerComponent>
+                {saveStocksResponse.loading === LoadingState.Pending ? (
+                  <Spinner animation="border" variant="info" />
+                ) : (
+                  <div></div>
+                )}
+              </SpinnerComponent>
+              <Form>
+                <HorizontallyCenterContainer>
+                  <Form.Group className="mb-3" controlId="formStockTicker">
+                    <Form.Label>Stock Ticker</Form.Label>
+                    <Form.Control
+                      value={ticker}
+                      type="input"
+                      placeholder="AAPL"
+                      required
+                      onChange={handleOnTickerOnChange}
+                    />
+                  </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formStockInitialPrice">
-                  <Form.Label>Initial Price</Form.Label>
-                  <Form.Control
-                    value={initialPrice}
-                    type="input"
-                    placeholder="50"
-                    required
-                    onChange={handleOnInitialPriceChange}
-                  />
-                </Form.Group>
+                  <Form.Group className="mb-3" controlId="formStockCompanyName">
+                    <Form.Label>Company Name</Form.Label>
+                    <Form.Control
+                      value={companyName}
+                      type="input"
+                      placeholder="Apple Inc"
+                      required
+                      onChange={handleCompanyNameChange}
+                    />
+                  </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formStockQuantity">
-                  <Form.Label>Volume</Form.Label>
-                  <Form.Control
-                    value={volume}
-                    type="input"
-                    placeholder="1000"
-                    required
-                    onChange={handleOnVolumeChange}
-                  />
-                </Form.Group>
-              </HorizontallyCenterContainer>
+                  <Form.Group className="mb-3" controlId="formStockInitialPrice">
+                    <Form.Label>Initial Price</Form.Label>
+                    <Form.Control
+                      value={initialPrice}
+                      type="input"
+                      placeholder="50"
+                      required
+                      onChange={handleOnInitialPriceChange}
+                    />
+                  </Form.Group>
 
-              <Button variant="primary" type="submit" onClick={handleSubmit}>
-                Save
-              </Button>
-            </Form>
-            {saveStocksResponse.error ? (
-              <Alert key={"danger"} variant={"danger"}>
-                Error saving stock. Please try again!
-              </Alert>
-            ) : (
-              <div></div>
-            )}
-          </SaveStockContainer>
-        </VerticalContainer>
-      </HorizontallyCenterContainer>
-    </AdminHomePageContainerWrapper>
-  );
-};
+                  <Form.Group className="mb-3" controlId="formStockQuantity">
+                    <Form.Label>Volume</Form.Label>
+                    <Form.Control
+                      value={volume}
+                      type="input"
+                      placeholder="1000"
+                      required
+                      onChange={handleOnVolumeChange}
+                    />
+                  </Form.Group>
+                </HorizontallyCenterContainer>
+
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                  Save
+                </Button>
+              </Form>
+              {saveStocksResponse.error ? (
+                <Alert key={"danger"} variant={"danger"}>
+                  Error saving stock. Please try again!
+                </Alert>
+              ) : (
+                <div></div>
+              )}
+            </SaveStockContainer>
+          </VerticalContainer>
+        </HorizontallyCenterContainer>
+      </AdminHomePageContainerWrapper>
+    );
+
+
+    if (getUserInfoResponse.data?.type === 'admin') {
+      return adminContent;
+    } else {
+      return noAdminContent;
+    }
+  };
+
 
 AdminHomePageContainer.defaultProps = {};
 
@@ -209,6 +255,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     getAllStocks: () => dispatch(getAllStocks()),
     saveStock: (saveStockRequest: Stock) =>
       dispatch(saveStock(saveStockRequest)),
+    getUserInfo: () => dispatch(getUserInfo()),
   };
 };
 
@@ -216,6 +263,7 @@ const mapStateToProps = (state: any) => {
   return {
     getAllStocksResponse: state.getAllStocksReducer,
     saveStocksResponse: state.saveStockReducer,
+    getUserInfoResponse: state.getUserInfoReducer
   };
 };
 

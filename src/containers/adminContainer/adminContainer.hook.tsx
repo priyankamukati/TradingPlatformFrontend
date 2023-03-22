@@ -7,6 +7,8 @@ export function AdminHomePageContainerLogic({
   getAllStocks,
   saveStock,
   saveStocksResponse,
+  getUserInfo,
+  getUserInfoResponse
 }: IAdminHomePageContainerProps) {
   const [ticker, setTicker] = React.useState<string | undefined>(undefined);
   const [companyName, setCompanyName] = React.useState<string | undefined>(
@@ -20,6 +22,12 @@ export function AdminHomePageContainerLogic({
   useEffect(() => {
     getAllStocks();
   }, [getAllStocks]);
+
+
+  useEffect(() => {
+    getUserInfo();
+  }, [getUserInfo]);
+  
 
   const handleOnTickerOnChange = (event: any) => {
     const value = event.target.value;

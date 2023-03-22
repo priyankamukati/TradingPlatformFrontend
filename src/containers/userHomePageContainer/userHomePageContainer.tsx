@@ -33,6 +33,14 @@ const VerticalContainer = styled.div`
   flex-direction: column;
 `;
 
+const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+`;
+
+
 const VerticalCenterContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,7 +69,6 @@ const GetStockContainer = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   margin-top: 3rem;
-  margin-bottom: 5rem;
 `;
 
 const SaveOrderContainer = styled.div`
@@ -161,16 +168,16 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
     </HorizontalContainer></Alert>
 
     const stockData = <div>{getAllStocksResponse.data?.map((stock) => (
-      <Alert key={'success'} variant={'success'}>
+      <Alert key={stock.id} variant={'success'}>
         <HorizontalContainer>
           <StockText>{stock.ticker}</StockText>
           <StockText>{stock.company_name}</StockText>
-          <StockText>{stock.current_price}</StockText>
-          <StockText>{stock.initial_price}</StockText>
+          <StockText>{stock.current_price ? stock.current_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.initial_price ? stock.initial_price.toFixed(2) : ''}</StockText>
           <StockText>{stock.volume}</StockText>
-          <StockText>{stock.todays_max_price}</StockText>
-          <StockText>{stock.todays_min_price}</StockText>
-          <StockText>{stock.todays_open_price}</StockText>
+          <StockText>{stock.todays_max_price ? stock.todays_max_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.todays_min_price  ? stock.todays_min_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.todays_open_price  ? stock.todays_open_price.toFixed(2) : ''}</StockText>
         </HorizontalContainer>
       </Alert>
     ))}</div>
@@ -180,13 +187,16 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
       <div>{stockData}</div>
     </div>
 
+
     return (
       <UserHomePageContainerWrapper>
         <NavigationBar></NavigationBar>
         <UserHomeContainer>
           <HorizontallyCenterContainer>
             <VerticalContainer>
+            <VerticalCenterContainer>
               <GetStockContainer>
+
                 <SpinnerComponent>
                   {getAllStocksResponse.loading === LoadingState.Pending ? (
                     <Spinner animation="border" variant="info" />
@@ -197,14 +207,20 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
                 <VerticalContainer>
                   {stockTable}
                 </VerticalContainer>
-                {getAllStocksResponse.error ? (
+              </GetStockContainer>
+
+              <ErrorContainer>
+                  {getAllStocksResponse.error ? (
                   <Alert key={"danger"} variant={"danger"}>
                     Error retrieving stocks data. Please try again!
                   </Alert>
                 ) : (
                   <div></div>
                 )}
-              </GetStockContainer>
+                </ErrorContainer>
+              </VerticalCenterContainer>
+
+
 
               <BuyStockContainer>
                 <SaveOrderContainer>
@@ -280,16 +296,17 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
                       Place Order
                     </StyledButton>
                     </ButtonContainer>
+                    
                     </HorizontallyCenterContainer>
-                    </VerticalCenterContainer>
-                    </VerticalContainer>
-                  {saveOrdersResponse.error ? (
+                    {saveOrdersResponse.error ? (
                     <Alert key={"danger"} variant={"danger"}>
                       Error saving Order. Please try again!
                     </Alert>
                   ) : (
                     <div></div>
                   )}
+                    </VerticalCenterContainer>
+                    </VerticalContainer>
                 </SaveOrderContainer>
               </BuyStockContainer>
             </VerticalContainer>

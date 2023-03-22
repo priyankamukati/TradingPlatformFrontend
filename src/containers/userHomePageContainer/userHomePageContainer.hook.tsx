@@ -22,12 +22,12 @@ export function UserHomePageContainerLogic({
     undefined
   );
 
-  useEffect(() => {
-    // const interval = setInterval(() => {
+/*   useEffect(() => {
+    const interval = setInterval(() => {
     getAllStocks();
-    // }, 1000)
-    // return () => clearInterval(interval);
-  }, [getAllStocks]);
+     }, 10000)
+     return () => clearInterval(interval);
+  }, [getAllStocks]); */
 
   const handleOnTickerOnChange = (event: any) => {
     const value = event.target.value;
@@ -73,15 +73,16 @@ export function UserHomePageContainerLogic({
         quantity &&
         (limitPrice ?? 0) >= 0
       ) {
-        const stock = getAllStocksResponse.data?.map((stock) => {
-          if (stock.ticker === ticker) return stock;
-        })[0];
+        const stocks = getAllStocksResponse.data?.filter((stock) => stock.ticker?.toLowerCase() == ticker.toLowerCase());
+        console.log("stocks : ", stocks);
+        const stock = stocks ? stocks[0] : undefined;
+        console.log("stock : ", stock);
         if (stock) {
           const saveOrderRequest = new Order();
           saveOrderRequest.stock_id = stock.id;
           saveOrderRequest.ticker = ticker;
-          saveOrderRequest.order_nature = orderNature;
-          saveOrderRequest.order_type = orderType;
+          saveOrderRequest.order_nature = orderNature.toLowerCase() ;
+          saveOrderRequest.order_type = orderType.toLowerCase() ;
           saveOrderRequest.quantity = quantity;
           saveOrderRequest.limit_price = limitPrice;
           saveOrder(saveOrderRequest);

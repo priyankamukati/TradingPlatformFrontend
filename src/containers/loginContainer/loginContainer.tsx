@@ -12,15 +12,19 @@ import { useNavigate } from "react-router-dom";
 import config from "../../aws-exports-new";
 import { Dispatch, FunctionComponent, useEffect } from "react";
 import { connect } from "react-redux";
-import { SaveUserInfo, UserInfo } from "../../model/userInfo";
+import { GetUserInfo, SaveUserInfo, UserInfo } from "../../model/userInfo";
 import { saveUserInfo } from "../../store/saveUserInfo.slice";
 import { State } from "../../model/state";
 import { LoadingState } from "../../model/loadingState";
+import { getUserInfo } from "../../store/getUserInfo.slice";
 Amplify.configure(config);
 
 interface ILoginContainerProps extends WithAuthenticatorProps {
   saveUserInfo: typeof saveUserInfo;
   saveUserInfoResponse: State<SaveUserInfo>;
+
+  getUserInfo: typeof getUserInfo;
+  getUserInfoResponse: State<GetUserInfo>;
 }
 
 const LoginContainer: FunctionComponent<ILoginContainerProps> & {
@@ -30,6 +34,8 @@ const LoginContainer: FunctionComponent<ILoginContainerProps> & {
   user,
   saveUserInfo,
   saveUserInfoResponse,
+  getUserInfo,
+  getUserInfoResponse
 }: ILoginContainerProps) => {
   const navigate = useNavigate();
 
@@ -52,6 +58,7 @@ const LoginContainer: FunctionComponent<ILoginContainerProps> & {
   };
   
   useEffect(() => {
+    console.log("user : ", user)
     if (user) {
       const userInfo = new UserInfo();
       userInfo.full_name = user.attributes?.name;
@@ -63,21 +70,20 @@ const LoginContainer: FunctionComponent<ILoginContainerProps> & {
   }, [user]);
 
   useEffect(() => {
-    if (saveUserInfoResponse.error) {
-      // error stuff
-    } else if (
-      saveUserInfoResponse &&
-      saveUserInfoResponse.loading == LoadingState.Idle
-    ) {
-      localStorage.setItem("user_type", saveUserInfoResponse?.data?.type ?? "");
+    if (saveUserInfoResponse.error || saveUserInfoResponse?.data) {
+      getUserInfo();
+  }}, [saveUserInfoResponse]);
 
-      if (saveUserInfoResponse.data?.type == "admin") {
-          navigate('/admin')
-      } else {
-         navigate('/home')
-      }
+
+  useEffect(() => {
+    if (getUserInfoResponse?.data) {
+      if (getUserInfoResponse.data?.type == "admin") {
+        navigate('/admin')
+    } else {
+       navigate('/home')
     }
-  }, [saveUserInfoResponse]);
+  }}, [getUserInfoResponse]);
+
 
   return (
     <div>
@@ -102,12 +108,14 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     saveUserInfo: (saveUserInfoRequest: UserInfo) =>
       dispatch(saveUserInfo(saveUserInfoRequest)),
+      getUserInfo: () => dispatch(getUserInfo())
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
     saveUserInfoResponse: state.saveUserInfoReducer,
+    getUserInfoResponse: state.getUserInfoReducer
   };
 };
 

@@ -3,10 +3,13 @@ import { API_SERVICE_URL, appURL } from "../config";
 import { LoadingState } from "../model/loadingState";
 import api from "./api";
 
-export const getAllStocks = createAsyncThunk("getAllStocks", async () => {
-  let url = API_SERVICE_URL + appURL.getAllStocksURL;
-  return await api.get(url);
-});
+export const getUserInfo = createAsyncThunk(
+  "getUserInfo",
+  async () => {
+    let url = API_SERVICE_URL + appURL.getUserInfoURL;
+    return await api.get(url);
+  }
+);
 
 const initialState = {
   data: null,
@@ -15,24 +18,23 @@ const initialState = {
 };
 
 // Then, handle actions in your reducers:
-const getAllStocksSlice = createSlice({
-  name: "getAllStocks",
+const getUserInfoSlice = createSlice({
+  name: "getUserInfo",
   initialState,
   reducers: {},
   extraReducers: {
-    [getAllStocks.pending.type]: (state, _) => {
+    [getUserInfo.pending.type]: (state, _) => {
       if (state.loading === LoadingState.Idle) {
         state.loading = LoadingState.Pending;
       }
     },
-    [getAllStocks.fulfilled.type]: (state, action) => {
+    [getUserInfo.fulfilled.type]: (state, action) => {
       if (state.loading === LoadingState.Pending) {
         state.loading = LoadingState.Idle;
         state.data = action.payload.data;
-        state.error = null;
       }
     },
-    [getAllStocks.rejected.type]: (state, action) => {
+    [getUserInfo.rejected.type]: (state, action) => {
       if (state.loading === LoadingState.Pending) {
         state.loading = LoadingState.Idle;
         state.error = action.error;
@@ -41,4 +43,4 @@ const getAllStocksSlice = createSlice({
   },
 });
 
-export const getAllStocksReducer = getAllStocksSlice.reducer;
+export const getUserInfoReducer = getUserInfoSlice.reducer;

@@ -9,3 +9,7 @@ export class UserInfo {
 export class SaveUserInfo extends UserInfo {
   public type: string | undefined = undefined;
 }
+
+export class GetUserInfo extends UserInfo {
+  public type: string | undefined = undefined;
+}

@@ -25,15 +25,16 @@ const VerticalContainer = styled.div`
 const HorizontallyContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   flex-grow: 1;
 `;
 
-export interface INavigationBarProps extends WithAuthenticatorProps {}
+export interface IAdminNavigationBarProps extends WithAuthenticatorProps {}
 
-const NavigationBar: FunctionComponent<INavigationBarProps> = ({
+const AdminNavigationBar: FunctionComponent<IAdminNavigationBarProps> = ({
   signOut,
   user,
-}: INavigationBarProps) => {
+}: IAdminNavigationBarProps) => {
   const GetSignInInfo = async () => {
     try {
       const response = await Auth.currentSession();
@@ -55,15 +56,11 @@ const NavigationBar: FunctionComponent<INavigationBarProps> = ({
     <NavBarContainer>
       <HorizontallyContainer>
       <Navbar fixed="top" expand="lg"  bg="primary" variant="dark">
-          <Nav className="me-auto">
-          <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/portfolio">Portfolio</Nav.Link>
-            <Nav.Link href="/order">Order History</Nav.Link>
-            <Nav.Link href="/myaccount">Account</Nav.Link>
-          </Nav>
+      <HorizontallyContainer>
           <Button variant="primary" type="submit" onClick={()=> {signOut && signOut(); navigate('/');}}>
               LogOut
           </Button>
+          </HorizontallyContainer>
       </Navbar>
       </HorizontallyContainer>
 
@@ -71,4 +68,4 @@ const NavigationBar: FunctionComponent<INavigationBarProps> = ({
   );
 };
 
-export default withAuthenticator(NavigationBar, { hideSignUp: true } );
+export default withAuthenticator(AdminNavigationBar, { hideSignUp: true });
