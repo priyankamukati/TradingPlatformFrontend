@@ -1,20 +1,19 @@
 import styled from "styled-components";
 import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
-import { OrderPageContainerLogic } from "./orderPageContainer.hook";
+import { AdminHomePageContainerLogic } from "./adminContainer.hook";
 import { getAllStocks } from "../../store/getAllStocks.slice";
 import { Stock } from "../../model/stock";
-import { Order } from "../../model/userOrder";
 import { State } from "../../model/state";
 import { Spinner } from "react-bootstrap";
 import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { saveOrder } from "../../store/saveOrder.slice";
+import { saveStock } from "../../store/saveStock.slice";
 import NavigationBar from "../../layout/navigationBar";
 
-const OrderPageContainerWrapper = styled.div`
+const AdminHomePageContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   margin-top: 1rem;
@@ -47,7 +46,7 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-const SaveOrderContainer = styled.div`
+const SaveStockContainer = styled.div`
   display: flex;
   margin-top: 5rem;
 `;
@@ -64,44 +63,39 @@ const SpinnerComponent = styled.div`
   justify-content: center;
 `;
 
-export interface IOrderPageContainerProps {
+export interface IAdminHomePageContainerProps {
   getAllStocks: typeof getAllStocks;
   getAllStocksResponse: State<Stock[]>;
 
-  saveOrder: typeof saveOrder;
-  saveOrdersResponse: State<Order[]>;
+  saveStock: typeof saveStock;
+  saveStocksResponse: State<Stock[]>;
 }
 
-const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
-  defaultProps: Partial<IOrderPageContainerProps>;
+const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & {
+  defaultProps: Partial<IAdminHomePageContainerProps>;
 } = ({
   getAllStocks,
   getAllStocksResponse,
-  saveOrder,
-  saveOrdersResponse,
-}: IOrderPageContainerProps) => {
+  saveStock,
+  saveStocksResponse,
+}: IAdminHomePageContainerProps) => {
   const {
     ticker,
     companyName,
-    orderNature,
-    orderType,
-    quantity,
-    limitPrice,
+    initialPrice,
+    volume,
     handleOnTickerOnChange,
     handleCompanyNameChange,
-    handleOrderNatureChange,
-    handleOrderTypeChange,
-    handleOnQuantityChange,
-    handleOnSetLimitPriceChange,
+    handleOnInitialPriceChange,
+    handleOnVolumeChange,
     handleSubmit,
-  } = OrderPageContainerLogic({
+  } = AdminHomePageContainerLogic({
     getAllStocks,
-    saveOrder,
-    saveOrdersResponse,
-    getAllStocksResponse,
-  } as IOrderPageContainerProps);
+    saveStock,
+    saveStocksResponse,
+  } as IAdminHomePageContainerProps);
   return (
-    <OrderPageContainerWrapper>
+    <AdminHomePageContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
@@ -122,9 +116,6 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
                     <StockText>{stock.current_price}</StockText>
                     <StockText>{stock.initial_price}</StockText>
                     <StockText>{stock.volume}</StockText>
-                    <StockText>{stock.todays_max_price}</StockText>
-                    <StockText>{stock.todays_min_price}</StockText>
-                    <StockText>{stock.todays_open_price}</StockText>
                   </HorizontalContainer>
                 </Alert>
               ))}
@@ -138,9 +129,9 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
             )}
           </GetStockContainer>
 
-          <SaveOrderContainer>
+          <SaveStockContainer>
             <SpinnerComponent>
-              {saveOrdersResponse.loading === LoadingState.Pending ? (
+              {saveStocksResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
               ) : (
                 <div></div>
@@ -171,46 +162,24 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockInitialPrice">
-                  <Form.Label>Order Nature</Form.Label>
+                  <Form.Label>Initial Price</Form.Label>
                   <Form.Control
-                    value={orderNature}
+                    value={initialPrice}
                     type="input"
-                    placeholder="Buy/Sell"
+                    placeholder="50"
                     required
-                    onChange={handleOrderNatureChange}
+                    onChange={handleOnInitialPriceChange}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formStockQuantity">
-                  <Form.Label>Order Type</Form.Label>
+                  <Form.Label>Volume</Form.Label>
                   <Form.Control
-                    value={orderType}
+                    value={volume}
                     type="input"
-                    placeholder="Limit/Market"
+                    placeholder="1000"
                     required
-                    onChange={handleOrderTypeChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formStockQuantity">
-                  <Form.Label>Limit Price</Form.Label>
-                  <Form.Control
-                    value={limitPrice}
-                    type="input"
-                    placeholder="0"
-                    required
-                    onChange={handleOnSetLimitPriceChange}
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formStockQuantity">
-                  <Form.Label>Quantity</Form.Label>
-                  <Form.Control
-                    value={quantity}
-                    type="input"
-                    placeholder="0"
-                    required
-                    onChange={handleOnQuantityChange}
+                    onChange={handleOnVolumeChange}
                   />
                 </Form.Group>
               </HorizontallyCenterContainer>
@@ -219,34 +188,34 @@ const OrderPageContainer: FunctionComponent<IOrderPageContainerProps> & {
                 Save
               </Button>
             </Form>
-            {saveOrdersResponse.error ? (
+            {saveStocksResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
-                Error saving Order. Please try again!
+                Error saving stock. Please try again!
               </Alert>
             ) : (
               <div></div>
             )}
-          </SaveOrderContainer>
+          </SaveStockContainer>
         </VerticalContainer>
       </HorizontallyCenterContainer>
-    </OrderPageContainerWrapper>
+    </AdminHomePageContainerWrapper>
   );
 };
 
-OrderPageContainer.defaultProps = {};
+AdminHomePageContainer.defaultProps = {};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getAllStocks: () => dispatch(getAllStocks()),
-    saveOrder: (saveOrderRequest: Order) =>
-      dispatch(saveOrder(saveOrderRequest)),
+    saveStock: (saveStockRequest: Stock) =>
+      dispatch(saveStock(saveStockRequest)),
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
     getAllStocksResponse: state.getAllStocksReducer,
-    saveOrdersResponse: state.saveOrderReducer,
+    saveStocksResponse: state.saveStockReducer,
   };
 };
 
@@ -256,4 +225,4 @@ type DispatchToPropsType = typeof mapDispatchToProps;
 export default connect<StateToPropsType, DispatchToPropsType>(
   mapStateToProps,
   mapDispatchToProps
-)(OrderPageContainer);
+)(AdminHomePageContainer);

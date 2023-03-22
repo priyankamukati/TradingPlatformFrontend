@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { Stock } from "../../model/stock";
 import { UserInfo } from "../../model/userInfo";
-import { IUserInfoPageContainerProps } from "./userInfoPageContainer";
+import { IUserInfoPageContainerProps } from "./userInfoContainer";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { LoadingState } from "../../model/loadingState";

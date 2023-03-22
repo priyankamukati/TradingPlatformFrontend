@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { Stock } from "../../model/stock";
-import { IUserOrdersViewPageContainerProps } from "./userOrdersViewPageContainer";
+import { IUserOrderContainerProps } from "./userOrderContainer";
 
-export function UserOrdersViewPageContainerLogic({
+export function UserOrderContainerLogic({
   getUserAllOrders,
-}: IUserOrdersViewPageContainerProps) {
+}: IUserOrderContainerProps) {
   useEffect(() => {
     getUserAllOrders();
   }, [getUserAllOrders]);

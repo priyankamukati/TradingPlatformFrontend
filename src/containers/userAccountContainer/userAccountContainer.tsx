@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
-import { UserCashBalancePageContainerLogic } from "./userCashBalancePageContainer.hook";
+import { UserAccountContainerLogic } from "./userAccountContainer.hook";
 import { getUserCashBalance } from "../../store/getUserCashBalance.slice";
 import { UserInfo } from "../../model/userInfo";
 import { State } from "../../model/state";
@@ -15,7 +15,7 @@ import { saveUserCashBalance } from "../../store/saveBalance.slice";
 import { UpdateUserCashBalance } from "../../model/UpdateUserCashBalance";
 import NavigationBar from "../../layout/navigationBar";
 
-const UserCashBalancePageContainerWrapper = styled.div`
+const UserAccountContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   margin-top: 1rem;
@@ -65,7 +65,7 @@ const SpinnerComponent = styled.div`
   justify-content: center;
 `;
 
-export interface IUserCashBalancePageContainerProps {
+export interface IUserAccountContainerProps {
   getUserCashBalance: typeof getUserCashBalance;
   getUserCashBalanceResponse: State<UserInfo>;
 
@@ -73,27 +73,27 @@ export interface IUserCashBalancePageContainerProps {
   saveUserCashBalanceResponse: State<UpdateUserCashBalance>;
 }
 
-const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContainerProps> & {
-  defaultProps: Partial<IUserCashBalancePageContainerProps>;
+const UserAccountContainer: FunctionComponent<IUserAccountContainerProps> & {
+  defaultProps: Partial<IUserAccountContainerProps>;
 } = ({
   getUserCashBalance,
   getUserCashBalanceResponse,
   saveUserCashBalance,
   saveUserCashBalanceResponse,
-}: IUserCashBalancePageContainerProps) => {
+}: IUserAccountContainerProps) => {
   console.log(
     "getUserCashBalanceResponse: ",
     getUserCashBalanceResponse.data?.cash_balance
   );
 
   const { handleOnCashBalanceOnChange, handleDeposit, handleWithdraw } =
-    UserCashBalancePageContainerLogic({
+    UserAccountContainerLogic({
       getUserCashBalance,
       saveUserCashBalance,
       saveUserCashBalanceResponse,
-    } as IUserCashBalancePageContainerProps);
+    } as IUserAccountContainerProps);
   return (
-    <UserCashBalancePageContainerWrapper>
+    <UserAccountContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
@@ -163,11 +163,11 @@ const UserCashBalancePageContainer: FunctionComponent<IUserCashBalancePageContai
           </SaveStockContainer>
         </VerticalContainer>
       </HorizontallyCenterContainer>
-    </UserCashBalancePageContainerWrapper>
+    </UserAccountContainerWrapper>
   );
 };
 
-UserCashBalancePageContainer.defaultProps = {};
+UserAccountContainer.defaultProps = {};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
@@ -190,4 +190,4 @@ type DispatchToPropsType = typeof mapDispatchToProps;
 export default connect<StateToPropsType, DispatchToPropsType>(
   mapStateToProps,
   mapDispatchToProps
-)(UserCashBalancePageContainer);
+)(UserAccountContainer);

@@ -2,18 +2,15 @@ import React, { useCallback } from "react";
 import { useEffect } from "react";
 import { Stock } from "../../model/stock";
 import { Order } from "../../model/userOrder";
-import { IOrderPageContainerProps } from "./orderPageContainer";
+import { IUserHomePageContainerProps } from "./userHomePageContainer";
 
-export function OrderPageContainerLogic({
+export function UserHomePageContainerLogic({
   getAllStocks,
   saveOrder,
   saveOrdersResponse,
   getAllStocksResponse,
-}: IOrderPageContainerProps) {
+}: IUserHomePageContainerProps) {
   const [ticker, setTicker] = React.useState<string | undefined>(undefined);
-  const [companyName, setCompanyName] = React.useState<string | undefined>(
-    undefined
-  );
   const [orderNature, setOrderNature] = React.useState<string | undefined>(
     undefined
   );
@@ -36,15 +33,12 @@ export function OrderPageContainerLogic({
     const value = event.target.value;
     setTicker(value);
   };
-  const handleCompanyNameChange = (event: any) => {
-    const value = event.target.value;
-    setCompanyName(value);
-  };
 
   const handleOrderNatureChange = (event: any) => {
     const value = event.target.value;
     setOrderNature(value);
   };
+
   const handleOrderTypeChange = (event: any) => {
     const value = event.target.value;
     setOrderType(value);
@@ -75,7 +69,6 @@ export function OrderPageContainerLogic({
         ticker &&
         ticker.length > 0 &&
         orderNature &&
-        companyName &&
         orderType &&
         quantity &&
         (limitPrice ?? 0) >= 0
@@ -87,7 +80,6 @@ export function OrderPageContainerLogic({
           const saveOrderRequest = new Order();
           saveOrderRequest.stock_id = stock.id;
           saveOrderRequest.ticker = ticker;
-          saveOrderRequest.company_name = companyName;
           saveOrderRequest.order_nature = orderNature;
           saveOrderRequest.order_type = orderType;
           saveOrderRequest.quantity = quantity;
@@ -98,7 +90,6 @@ export function OrderPageContainerLogic({
     },
     [
       ticker,
-      companyName,
       orderNature,
       orderType,
       quantity,
@@ -112,7 +103,6 @@ export function OrderPageContainerLogic({
     if (saveOrdersResponse.data) {
       getAllStocks();
       setTicker("");
-      setCompanyName("");
       setOrderNature("");
       setOrderType("");
       setLimitPrice(0);
@@ -122,13 +112,11 @@ export function OrderPageContainerLogic({
 
   return {
     ticker,
-    companyName,
     orderNature,
     orderType,
     quantity,
     limitPrice,
     handleOnTickerOnChange,
-    handleCompanyNameChange,
     handleOrderNatureChange,
     handleOrderTypeChange,
     handleOnQuantityChange,

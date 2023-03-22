@@ -5,11 +5,16 @@ import {
   withAuthenticator,
   WithAuthenticatorProps,
 } from "@aws-amplify/ui-react";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-const AdminHomePageContainerWrapper = styled.div`
+
+const NavBarContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
   flex-grow: 1;
-  margin-top: 1rem;
+  width: 100%;
 `;
 
 const VerticalContainer = styled.div`
@@ -17,10 +22,9 @@ const VerticalContainer = styled.div`
   flex-direction: column;
 `;
 
-const HorizontallyCenterContainer = styled.div`
+const HorizontallyContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   flex-grow: 1;
 `;
 
@@ -45,15 +49,26 @@ const NavigationBar: FunctionComponent<INavigationBarProps> = ({
     GetSignInInfo();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
-    <AdminHomePageContainerWrapper>
-      <HorizontallyCenterContainer>
-        <VerticalContainer>
-          <button onClick={signOut}>Sign out</button>
-        </VerticalContainer>
-      </HorizontallyCenterContainer>
-    </AdminHomePageContainerWrapper>
+    <NavBarContainer>
+      <HorizontallyContainer>
+      <Navbar fixed="top" expand="lg"  bg="primary" variant="dark">
+          <Nav className="me-auto">
+            <Nav.Link href="/portfolio">Portfolio</Nav.Link>
+            <Nav.Link href="/order">Order History</Nav.Link>
+            <Nav.Link href="/myaccount">Account</Nav.Link>
+            <Nav.Link href="/home">Home</Nav.Link>
+          </Nav>
+          <Button variant="primary" type="submit" onClick={()=> {signOut && signOut(); navigate('/');}}>
+              LogOut
+          </Button>
+      </Navbar>
+      </HorizontallyContainer>
+
+    </NavBarContainer>
   );
 };
 
-export default NavigationBar;
+export default withAuthenticator(NavigationBar);

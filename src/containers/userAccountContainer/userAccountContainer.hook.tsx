@@ -3,13 +3,13 @@ import { useEffect } from "react";
 import { Stock } from "../../model/stock";
 import { UpdateUserCashBalance } from "../../model/UpdateUserCashBalance";
 import { UserInfo } from "../../model/userInfo";
-import { IUserCashBalancePageContainerProps } from "./userCashBalancePageContainer";
+import { IUserAccountContainerProps } from "./userAccountContainer";
 
-export function UserCashBalancePageContainerLogic({
+export function UserAccountContainerLogic({
   getUserCashBalance,
   saveUserCashBalance,
   saveUserCashBalanceResponse,
-}: IUserCashBalancePageContainerProps) {
+}: IUserAccountContainerProps) {
   const [cashBalance, setCashBalance] = React.useState<number | undefined>(
     undefined
   );

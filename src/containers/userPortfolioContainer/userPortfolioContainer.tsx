@@ -1,19 +1,16 @@
 import styled from "styled-components";
 import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
-import { UserOrdersViewPageContainerLogic } from "./userOrdersViewPageContainer.hook";
-import { getUserAllOrders } from "../../store/getUserAllOrders.slice";
-import { Stock } from "../../model/stock";
-import { Order } from "../../model/userOrder";
+import { UserPortfolioContainerLogic } from "./userPortfolioContainer.hook";
+import { getUserStocks } from "../../store/getUserStocks.slice";
+import { userStock } from "../../model/userStock";
 import { State } from "../../model/state";
 import { Spinner } from "react-bootstrap";
 import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import NavigationBar from "../../layout/navigationBar";
 
-const UserOrdersViewPageContainerWrapper = styled.div`
+const UserPortfolioContainerWrapper = styled.div`
   display: flex;
   flex-grow: 1;
   margin-top: 1rem;
@@ -46,11 +43,6 @@ const GetStockContainer = styled.div`
   padding: 2rem;
 `;
 
-const SaveStockContainer = styled.div`
-  display: flex;
-  margin-top: 5rem;
-`;
-
 const StockText = styled.div`
   display: flex;
   margin-left: 0.25rem;
@@ -63,52 +55,43 @@ const SpinnerComponent = styled.div`
   justify-content: center;
 `;
 
-export interface IUserOrdersViewPageContainerProps {
-  getUserAllOrders: typeof getUserAllOrders;
-  getUserAllOrdersResponse: State<Order[]>;
+export interface IUserPortfolioContainerProps {
+  getUserStocks: typeof getUserStocks;
+  getUserStocksResponse: State<userStock[]>;
 }
 
-const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContainerProps> & {
-  defaultProps: Partial<IUserOrdersViewPageContainerProps>;
-} = ({
-  getUserAllOrders,
-  getUserAllOrdersResponse,
-}: IUserOrdersViewPageContainerProps) => {
-  UserOrdersViewPageContainerLogic({
-    getUserAllOrders,
-  } as IUserOrdersViewPageContainerProps);
+const UserPortfolioContainer: FunctionComponent<IUserPortfolioContainerProps> & {
+  defaultProps: Partial<IUserPortfolioContainerProps>;
+} = ({ getUserStocks, getUserStocksResponse }: IUserPortfolioContainerProps) => {
+  UserPortfolioContainerLogic({ getUserStocks } as IUserPortfolioContainerProps);
   return (
-    <UserOrdersViewPageContainerWrapper>
+    <UserPortfolioContainerWrapper>
       <NavigationBar></NavigationBar>
       <HorizontallyCenterContainer>
         <VerticalContainer>
           <GetStockContainer>
             <SpinnerComponent>
-              {getUserAllOrdersResponse.loading === LoadingState.Pending ? (
+              {getUserStocksResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
               ) : (
                 <div></div>
               )}
             </SpinnerComponent>
             <VerticalContainer>
-              {getUserAllOrdersResponse.data?.map((user_order) => (
+              {getUserStocksResponse.data?.map((user_stock) => (
                 <Alert key={"success"} variant={"success"}>
                   <HorizontalContainer>
-                    <StockText>{user_order.ticker}</StockText>
-                    <StockText>{user_order.company_name}</StockText>
-                    <StockText>{user_order.order_nature}</StockText>
-                    <StockText>{user_order.order_type}</StockText>
-                    <StockText>{user_order.quantity}</StockText>
-                    <StockText>{user_order.limit_price}</StockText>
-                    <StockText>{user_order.status}</StockText>
-                    <StockText>{user_order.status_reason}</StockText>
+                    <StockText>{user_stock.ticker}</StockText>
+                    <StockText>{user_stock.company_name}</StockText>
+                    <StockText>{user_stock.quantity}</StockText>
+                    <StockText>{user_stock.current_price}</StockText>
                   </HorizontalContainer>
                 </Alert>
               ))}
             </VerticalContainer>
-            {getUserAllOrdersResponse.error ? (
+            {getUserStocksResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
-                Error retrieving Orders data. Please try again!
+                Error retrieving stocks data. Please try again!
               </Alert>
             ) : (
               <div></div>
@@ -116,21 +99,21 @@ const UserOrdersViewPageContainer: FunctionComponent<IUserOrdersViewPageContaine
           </GetStockContainer>
         </VerticalContainer>
       </HorizontallyCenterContainer>
-    </UserOrdersViewPageContainerWrapper>
+    </UserPortfolioContainerWrapper>
   );
 };
 
-UserOrdersViewPageContainer.defaultProps = {};
+UserPortfolioContainer.defaultProps = {};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    getUserAllOrders: () => dispatch(getUserAllOrders()),
+    getUserStocks: () => dispatch(getUserStocks()),
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
-    getUserAllOrdersResponse: state.getUserAllOrdersReducer,
+    getUserStocksResponse: state.getUserStocksReducer,
   };
 };
 
@@ -140,4 +123,4 @@ type DispatchToPropsType = typeof mapDispatchToProps;
 export default connect<StateToPropsType, DispatchToPropsType>(
   mapStateToProps,
   mapDispatchToProps
-)(UserOrdersViewPageContainer);
+)(UserPortfolioContainer);

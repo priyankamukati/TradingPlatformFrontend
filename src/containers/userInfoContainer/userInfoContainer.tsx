@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
-import { UserInfoPageContainerLogic } from "./userInfoPageContainer.hook";
+import { UserInfoPageContainerLogic } from "./userInfoContainer.hook";
 import { State } from "../../model/state";
 import { Spinner } from "react-bootstrap";
 import { LoadingState } from "../../model/loadingState";

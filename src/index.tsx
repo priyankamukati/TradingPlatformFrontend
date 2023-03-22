@@ -6,16 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import store from "./store/store";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdminHomePageContainer from "./containers/adminContainer/adminHomePageContainer";
-import UserHomePageContainer from "./containers/userContainer/userHomePageContainer";
-import OrderPageContainer from "./containers/orderContainer/orderPageContainer";
-import UserOrdersViewPageContainer from "./containers/userOrdersViewContainer/userOrdersViewPageContainer";
-import UserCashBalancePageContainer from "./containers/userCashBalanceContainer/userCashBalancePageContainer";
+import AdminHomePageContainer from "./containers/adminContainer/adminContainer";
+import UserPortfolioContainer from "./containers/userPortfolioContainer/userPortfolioContainer";
+import UserHomePageContainer from "./containers/userHomePageContainer/userHomePageContainer";
+import UserOrderContainer from "./containers/userOrderContainer/userOrderContainer";
+import UserAccountContainer from "./containers/userAccountContainer/userAccountContainer";
 
 import { Amplify } from "aws-amplify";
 import awsExports from "./aws-exports-new";
 import LoginContainer from "./containers/loginContainer/loginContainer";
-import UserInfoPageContainer from "./containers/userInfoContainer/userInfoPageContainer";
+import LandingPageContainer from "./containers/landingPageContainer/landingPageContainer";
 Amplify.configure(awsExports);
 
 const root = ReactDOM.createRoot(
@@ -26,20 +26,15 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
+        <Route path="/" element={<LandingPageContainer />} />
           <Route path="/login" element={<LoginContainer />} />
           <Route path="/admin" element={<AdminHomePageContainer />} />
-          <Route path="/" element={<UserHomePageContainer />} />
-          <Route path="/userorder" element={<OrderPageContainer />} />
-          <Route
-            path="/userallorder"
-            element={<UserOrdersViewPageContainer />}
-          />
-          <Route
-            path="/usercashbalance"
-            element={<UserCashBalancePageContainer />}
-          />
-          <Route path="/userinfo" element={<UserInfoPageContainer />} />
-        </Routes>
+          <Route path="/home" element={<UserHomePageContainer />} />
+          <Route path="/portfolio" element={<UserPortfolioContainer />} />
+          <Route path="/order" element={<UserOrderContainer />}/>
+          <Route path="/myaccount" element={<UserAccountContainer />} />
+{/*           <Route path="/userinfo" element={<UserInfoPageContainer />} />
+ */}        </Routes>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

@@ -50,14 +50,14 @@ const LoginContainer: FunctionComponent<ILoginContainerProps> & {
       });
     },
   };
-
+  
   useEffect(() => {
     if (user) {
       const userInfo = new UserInfo();
       userInfo.full_name = user.attributes?.name;
       userInfo.username = user.attributes?.preferred_username;
       userInfo.passcode = user.attributes?.nickname;
-      userInfo.email = user.attributes?.email;
+      userInfo.email = user.attributes?.email; 
       saveUserInfo(userInfo);
     }
   }, [user]);
@@ -72,9 +72,9 @@ const LoginContainer: FunctionComponent<ILoginContainerProps> & {
       localStorage.setItem("user_type", saveUserInfoResponse?.data?.type ?? "");
 
       if (saveUserInfoResponse.data?.type == "admin") {
-        //  navigate('/admin')
+          navigate('/admin')
       } else {
-        // navigate('/userorder')
+         navigate('/home')
       }
     }
   }, [saveUserInfoResponse]);
