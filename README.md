@@ -4,10 +4,10 @@ Trade with EasyTrading by our easy to use UI.
 
 ## Get Started
 
-Learn about React https://react.dev/
-Redux https://redux.js.org/
-Typescript https://www.typescriptlang.org/
-Amplify https://docs.amplify.aws/start/q/integration/react/
+1. Learn about React https://react.dev/
+2. Redux https://redux.js.org/
+3. Typescript https://www.typescriptlang.org/
+4. Amplify https://docs.amplify.aws/start/q/integration/react/
 
 
 ```bash
