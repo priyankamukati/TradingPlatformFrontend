@@ -6,7 +6,7 @@ import { getAllStocks } from "../../store/getAllStocks.slice";
 import { Stock } from "../../model/stock";
 import { Order } from "../../model/userOrder";
 import { State } from "../../model/state";
-import { Spinner } from "react-bootstrap";
+import { ButtonGroup, Spinner, ToggleButton } from "react-bootstrap";
 import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
@@ -18,19 +18,22 @@ const UserHomePageContainerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  background: #F0F8FF;
 `
 
 const UserHomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
+  flex-grow: 1;
 `;
 
 const VerticalContainer = styled.div`
   display: flex;
   flex-direction: column;
+  
 `;
 
 const ErrorContainer = styled.div`
@@ -44,7 +47,6 @@ const ErrorContainer = styled.div`
 const VerticalCenterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
 `;
 
 const HorizontalContainer = styled.div`
@@ -63,12 +65,10 @@ const HorizontallyCenterContainer = styled.div`
 
 const GetStockContainer = styled.div`
   display: flex;
-  height: 30rem;
-  justify-content: center;
+  height: 60rem;
   overflow: scroll;
   overflow-x: hidden;
   overflow-y: auto;
-  margin-top: 3rem;
 `;
 
 const SaveOrderContainer = styled.div`
@@ -79,13 +79,47 @@ const SaveOrderContainer = styled.div`
 const StockText = styled.div`
   display: flex;
   width: 10rem;
-  font-size: 1rem;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
 `;
+
+const NoStockText = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
 
 const StockHeaderText = styled.div`
   display: flex;
   width: 10rem;
-  font-size: 1rem; 
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+const PageTitleText = styled.div`
+  display: flex;
+  width: 10rem;
+  font-size: 60px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+  margin-top: 2rem;
+  margin-left: 4rem;
+`;
+
+const FormLabel = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
 `;
 
 const SpinnerComponent = styled.div`
@@ -98,7 +132,6 @@ const BuyStockContainer = styled.div`
   flex-direction: column;
   background: #EBEDEF;
   padding: 2rem;
-  justify-content: center;
   box-shadow: 3px 3px #FCF3CF;
 `;
 
@@ -109,14 +142,19 @@ const StyledFormGroup = styled(Form.Group)`
 const ButtonContainer = styled.div`
   text-align: center;
   max-height: 4rem;
-  max-width: 20rem;
+  max-width: 25rem;
   vertical-align: middle;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
 `;
 
 const StyledButton = styled(Button)`
   text-align: center;
   max-height: 4rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   vertical-align: middle;
+  background: #warning;
 `;
 
 
@@ -138,23 +176,23 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
 }: IUserHomePageContainerProps) => {
     const {
       ticker,
-      orderNature,
-      orderType,
       quantity,
       limitPrice,
       handleOnTickerOnChange,
-      handleOrderNatureChange,
-      handleOrderTypeChange,
       handleOnQuantityChange,
       handleOnSetLimitPriceChange,
       handleSubmit,
+      errorMessage,
+      limitValueChecked,
+      limitValueOptions,
+      setLimitValueChecked,
     } = UserHomePageContainerLogic({
       getAllStocks,
       saveOrder,
       saveOrdersResponse,
       getAllStocksResponse,
-    } as IUserHomePageContainerProps);
 
+    } as IUserHomePageContainerProps);
 
     const stockHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
       <StockHeaderText>{'Ticker'}</StockHeaderText>
@@ -167,7 +205,7 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
       <StockHeaderText>{'Todays OpenPrice'}</StockHeaderText>
     </HorizontalContainer></Alert>
 
-    const stockData = <div>{getAllStocksResponse.data?.map((stock) => (
+    const stockData = <div>{getAllStocksResponse.data && getAllStocksResponse.data.length > 0 ? getAllStocksResponse.data.map((stock) => (
       <Alert key={stock.id} variant={'success'}>
         <HorizontalContainer>
           <StockText>{stock.ticker}</StockText>
@@ -176,11 +214,14 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
           <StockText>{stock.initial_price ? stock.initial_price.toFixed(2) : ''}</StockText>
           <StockText>{stock.volume}</StockText>
           <StockText>{stock.todays_max_price ? stock.todays_max_price.toFixed(2) : ''}</StockText>
-          <StockText>{stock.todays_min_price  ? stock.todays_min_price.toFixed(2) : ''}</StockText>
-          <StockText>{stock.todays_open_price  ? stock.todays_open_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.todays_min_price ? stock.todays_min_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.todays_open_price ? stock.todays_open_price.toFixed(2) : ''}</StockText>
         </HorizontalContainer>
       </Alert>
-    ))}</div>
+    )) : <Alert key={'no-stock'} variant={'danger'}>
+      <NoStockText>No stocks added to the platform</NoStockText>
+    </Alert>
+    }</div>
 
     const stockTable = <div>
       <div>{stockHeaders}</div>
@@ -191,32 +232,33 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
     return (
       <UserHomePageContainerWrapper>
         <NavigationBar></NavigationBar>
+        <PageTitleText>Market</PageTitleText>
         <UserHomeContainer>
           <HorizontallyCenterContainer>
             <VerticalContainer>
-            <VerticalCenterContainer>
-              <GetStockContainer>
+              <VerticalCenterContainer>
+                <GetStockContainer>
 
-                <SpinnerComponent>
-                  {getAllStocksResponse.loading === LoadingState.Pending ? (
-                    <Spinner animation="border" variant="info" />
+                  <SpinnerComponent>
+                    {getAllStocksResponse.loading === LoadingState.Pending ? (
+                      <Spinner animation="border" variant="info" />
+                    ) : (
+                      <div></div>
+                    )}
+                  </SpinnerComponent>
+                  <VerticalContainer>
+                    {stockTable}
+                  </VerticalContainer>
+                </GetStockContainer>
+
+                <ErrorContainer>
+                  {getAllStocksResponse.error ? (
+                    <Alert key={"danger"} variant={"danger"}>
+                      <NoStockText>Error retrieving stocks data. Please try again after sometime!</NoStockText>
+                    </Alert>
                   ) : (
                     <div></div>
                   )}
-                </SpinnerComponent>
-                <VerticalContainer>
-                  {stockTable}
-                </VerticalContainer>
-              </GetStockContainer>
-
-              <ErrorContainer>
-                  {getAllStocksResponse.error ? (
-                  <Alert key={"danger"} variant={"danger"}>
-                    Error retrieving stocks data. Please try again!
-                  </Alert>
-                ) : (
-                  <div></div>
-                )}
                 </ErrorContainer>
               </VerticalCenterContainer>
 
@@ -233,80 +275,95 @@ const UserHomePageContainer: FunctionComponent<IUserHomePageContainerProps> & {
                   </SpinnerComponent>
                   <VerticalContainer>
                     <VerticalCenterContainer>
-                    <HorizontallyCenterContainer>
-                      <StyledFormGroup className="mb-3" controlId="formStockTicker">
-                        <Form.Label>Stock Ticker</Form.Label>
-                        <Form.Control
-                          value={ticker}
-                          type="input"
-                          placeholder="AAPL"
-                          required
-                          onChange={handleOnTickerOnChange}
-                        />
-                      </StyledFormGroup>
+                      <HorizontallyCenterContainer>
+                        <StyledFormGroup className="mb-3" controlId="formStockTicker">
+                          <FormLabel>Stock Ticker</FormLabel>
+                          <Form.Control
+                            value={ticker}
+                            type="input"
+                            placeholder="AAPL"
+                            required
+                            onChange={handleOnTickerOnChange}
+                          />
+                        </StyledFormGroup>
+      
+                         <StyledFormGroup className="mb-3" controlId="buy">
+                          <FormLabel>Order Type</FormLabel>
+                          <ButtonGroup>
+                            {limitValueOptions.map((radio, idx) =>  <ToggleButton
+                                key={idx}
+                                id={`radio-${idx}`}
+                                type="radio"
+                                variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+                                name="radio"
+                                value={radio.value}
+                                checked={limitValueChecked === radio.value}
+                                onChange={(e) => {
+                                  e.stopPropagation(); 
+                                  e.preventDefault(); 
+                                  console.log("limit checked: ", e.currentTarget.value); 
+                                  setLimitValueChecked(e.currentTarget.value);
+                                }}
+                              >
+                                {radio.name}
+                              </ToggleButton>
+                            )}
+                          </ButtonGroup>
+                        </StyledFormGroup>
 
-                      <StyledFormGroup className="mb-3" controlId="formStockInitialPrice">
-                        <Form.Label>Order Nature</Form.Label>
-                        <Form.Control
-                          value={orderNature}
-                          type="input"
-                          placeholder="'buy' or 'sell'"
-                          required
-                          onChange={handleOrderNatureChange}
-                        />
-                      </StyledFormGroup>
+                      {limitValueChecked == "2" ?
+                        <StyledFormGroup className="mb-3" controlId="formStockQuantity">
+                          <FormLabel>Limit Price</FormLabel>
+                          <Form.Control
+                            value={limitPrice}
+                            type="input"
+                            placeholder="optional field, ex 0"
+                            required
+                            onChange={handleOnSetLimitPriceChange}
+                          />
+                        </StyledFormGroup>
+                        : <div></div>}
 
-                      <StyledFormGroup className="mb-3" controlId="formStockQuantity">
-                        <Form.Label>Order Type</Form.Label>
-                        <Form.Control
-                          value={orderType}
-                          type="input"
-                          placeholder="'limit' or 'market'"
-                          required
-                          onChange={handleOrderTypeChange}
-                        />
-                      </StyledFormGroup>
+                        <StyledFormGroup className="mb-3" controlId="formStockQuantity">
+                          <FormLabel>Quantity</FormLabel>
+                          <Form.Control
+                            value={quantity}
+                            type="input"
+                            placeholder="100"
+                            required
+                            onChange={handleOnQuantityChange}
+                          />
+                        </StyledFormGroup>
 
-                      <StyledFormGroup className="mb-3" controlId="formStockQuantity">
-                        <Form.Label>Limit Price</Form.Label>
-                        <Form.Control
-                          value={limitPrice}
-                          type="input"
-                          placeholder="optional field, ex 0"
-                          required
-                          onChange={handleOnSetLimitPriceChange}
-                        />
-                      </StyledFormGroup>
-
-                      <StyledFormGroup className="mb-3" controlId="formStockQuantity">
-                        <Form.Label>Quantity</Form.Label>
-                        <Form.Control
-                          value={quantity}
-                          type="input"
-                          placeholder="100"
-                          required
-                          onChange={handleOnQuantityChange}
-                        />
-                      </StyledFormGroup>
-
-                    </HorizontallyCenterContainer>
-                    <HorizontallyCenterContainer>
-                    <ButtonContainer>
-                    <StyledButton variant="primary" type="submit" onClick={handleSubmit}>
-                      Place Order
-                    </StyledButton>
-                    </ButtonContainer>
-                    
-                    </HorizontallyCenterContainer>
-                    {saveOrdersResponse.error ? (
-                    <Alert key={"danger"} variant={"danger"}>
-                      Error saving Order. Please try again!
-                    </Alert>
-                  ) : (
-                    <div></div>
-                  )}
+                      </HorizontallyCenterContainer>
+                      <HorizontallyCenterContainer>
+                        <ButtonContainer>
+                          <StyledButton variant="primary" type="submit" onClick={(e:any) => handleSubmit(e, true)}>
+                            <FormLabel>Place Buy</FormLabel>
+                          </StyledButton>
+                        </ButtonContainer>
+                        <ButtonContainer>
+                          <StyledButton variant="warning" type="submit" onClick={(e:any) => handleSubmit(e, false)}>
+                            <FormLabel>Place Sell</FormLabel>
+                          </StyledButton>
+                        </ButtonContainer>
+                      </HorizontallyCenterContainer>
+                      {saveOrdersResponse.error ? (
+                        <Alert key={"danger"} variant={"danger"}>
+                          <NoStockText>{'Error saving Order. Please try again!'}</NoStockText>
+                        </Alert>
+                      ) : (
+                        <div></div>
+                      )}
+                      {errorMessage !== undefined ? (
+                        <Alert key={"danger"} variant={"danger"}>
+                          <NoStockText>{errorMessage}</NoStockText>
+                        </Alert>
+                      ) : (
+                        <div></div>
+                      )}
                     </VerticalCenterContainer>
-                    </VerticalContainer>
+                  </VerticalContainer>
                 </SaveOrderContainer>
               </BuyStockContainer>
             </VerticalContainer>

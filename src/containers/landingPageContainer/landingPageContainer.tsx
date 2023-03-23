@@ -30,7 +30,7 @@ const HorizontalContainer = styled.div`
 const HorizontalCenterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  margin-left: 3rem;
 ;`
 
 const LandingPageTitleContainer = styled.div`
@@ -56,9 +56,7 @@ const BackgroundImageContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin-top: 20rem;
-  
+  margin-top: 10rem;
 `;
 
 const StyledButton = styled(Button)`
@@ -67,20 +65,37 @@ const StyledButton = styled(Button)`
   padding-right: 4rem;
   vertical-align: middle;
   font-size: 3em;
-  background: linear-gradient(112.4deg, rgb(176, 174, 225) 44.9%, rgb(135, 197, 235) 94.5%);
+  background: linear-gradient(114.9deg, rgb(34, 34, 34) 8.3%, rgb(0, 40, 60) 41.6%, rgb(0, 143, 213) 93.4%);
 `;
 
 const LandingPageTitle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  font-size: 6em;
-  min-width: 30rem;
   margin-left: 3rem;
-  margin-top: 2rem;
-  color: #c0c0c0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-style: italic;
+  margin-top: 7rem;
+  display: flex;
+  width: 10rem;
+  font-size: 80px;
+  line-weight: 40px;
+  letter-spacing: 3px;
+  font-weight: 200;
+  color: white;
+`;
+
+const LandingPageDetailTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-left: 3rem;
+  margin-top: 10rem;
+  display: flex;
+  width: 50rem;
+  font-size: 50px;
+  line-weight: 40px;
+  letter-spacing: 3px;
+  font-weight: 200;
+  color: white;
 `;
 
 interface ILandingContainerProps extends WithAuthenticatorProps {}
@@ -98,6 +113,7 @@ const LandingContainer: FunctionComponent<ILandingContainerProps> & {
     <HorizontalContainer>
     <LandingPageTitleContainer>
       <LandingPageTitle>EasyTrading</LandingPageTitle>
+      <LandingPageDetailTitle>World's best stock trading platform that makes trading super convenient!</LandingPageDetailTitle>
       <HorizontalCenterContainer>
       <ButtonContainer>
       <StyledButton variant="primary" type="submit" onClick={() => {navigate('/login')}}>

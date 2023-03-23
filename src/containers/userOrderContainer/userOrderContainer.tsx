@@ -12,7 +12,11 @@ import NavigationBar from "../../layout/navigationBar";
 
 const UserOrderContainerWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  width: 100vw;
+  height: 100vh;
+  background: #F0F8FF;
   margin-top: 1rem;
 `;
 
@@ -35,7 +39,7 @@ const HorizontallyCenterContainer = styled.div`
 
 const GetStockContainer = styled.div`
   display: flex;
-  height: 30rem;
+  height: 60rem;
   justify-content: center;
   overflow: scroll;
   overflow-x: hidden;
@@ -47,13 +51,49 @@ const StockText = styled.div`
   display: flex;
   margin-left: 0.25rem;
   width: 10rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+  text-align: left;
 `;
 
 const SpinnerComponent = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+const StockHeaderText = styled.div`
+  display: flex;
+  width: 10rem;
+
+  font-size: 1rem;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+  text-align: left;
+`;
+
+const NoStockText = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+
+const PageTitleText = styled.div`
+  display: flex;
+  width: 50rem;
+  font-size: 60px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+  margin-top: 2rem;
+  margin-left: 4rem;
+`;
+
 
 export interface IUserOrderContainerProps {
   getUserAllOrders: typeof getUserAllOrders;
@@ -69,11 +109,50 @@ const UserOrderContainer: FunctionComponent<IUserOrderContainerProps> & {
   UserOrderContainerLogic({
     getUserAllOrders,
   } as IUserOrderContainerProps);
+
+
+  const orderHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
+  <StockHeaderText>{'Ticker'}</StockHeaderText>
+  <StockHeaderText>{'Company'}</StockHeaderText>
+  <StockHeaderText>{'Buy/Sell'}</StockHeaderText>
+  <StockHeaderText>{'Market/Limit'}</StockHeaderText>
+  <StockHeaderText>{'Quantity'}</StockHeaderText>
+  <StockHeaderText>{'Limit Price'}</StockHeaderText>
+  <StockHeaderText>{'Status'}</StockHeaderText>
+  <StockHeaderText>{'Status Reason'}</StockHeaderText>
+</HorizontalContainer></Alert>
+
+const orderData = <div>{getUserAllOrdersResponse.data && getUserAllOrdersResponse.data.length > 0 ? getUserAllOrdersResponse.data.map((order) => (
+  <Alert key={order.ticker} variant={'success'}>
+    <HorizontalContainer>
+    <StockText>{order.ticker}</StockText>
+                    <StockText>{order.company_name}</StockText>
+                    <StockText>{order.order_nature}</StockText>
+                    <StockText>{order.order_type}</StockText>
+                    <StockText>{order.quantity}</StockText>
+                    <StockText>{order.limit_price}</StockText>
+                    <StockText>{order.status}</StockText>
+                    <StockText>{order.status_reason}</StockText>
+    </HorizontalContainer>
+  </Alert>
+)) : <Alert key={'no-stock'} variant={'danger'}>
+  <NoStockText>No stocks added to the platform</NoStockText>
+</Alert>
+}</div>
+
+const orderTable = <div>
+<div>{orderHeaders}</div>
+<div>{orderData}</div>
+</div>
+
+
   return (
     <UserOrderContainerWrapper>
       <NavigationBar></NavigationBar>
+      <PageTitleText>Transaction History</PageTitleText>
       <HorizontallyCenterContainer>
         <VerticalContainer>
+        
           <GetStockContainer>
             <SpinnerComponent>
               {getUserAllOrdersResponse.loading === LoadingState.Pending ? (
@@ -83,29 +162,16 @@ const UserOrderContainer: FunctionComponent<IUserOrderContainerProps> & {
               )}
             </SpinnerComponent>
             <VerticalContainer>
-              {getUserAllOrdersResponse.data?.map((user_order) => (
-                <Alert key={"success"} variant={"success"}>
-                  <HorizontalContainer>
-                    <StockText>{user_order.ticker}</StockText>
-                    <StockText>{user_order.company_name}</StockText>
-                    <StockText>{user_order.order_nature}</StockText>
-                    <StockText>{user_order.order_type}</StockText>
-                    <StockText>{user_order.quantity}</StockText>
-                    <StockText>{user_order.limit_price}</StockText>
-                    <StockText>{user_order.status}</StockText>
-                    <StockText>{user_order.status_reason}</StockText>
-                  </HorizontalContainer>
-                </Alert>
-              ))}
+              {orderTable}
             </VerticalContainer>
-            {getUserAllOrdersResponse.error ? (
+          </GetStockContainer>
+          {getUserAllOrdersResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
                 Error retrieving Orders data. Please try again!
               </Alert>
             ) : (
               <div></div>
             )}
-          </GetStockContainer>
         </VerticalContainer>
       </HorizontallyCenterContainer>
     </UserOrderContainerWrapper>

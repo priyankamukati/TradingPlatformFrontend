@@ -13,7 +13,6 @@ const NavBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
-  flex-grow: 1;
   width: 100%;
 `;
 

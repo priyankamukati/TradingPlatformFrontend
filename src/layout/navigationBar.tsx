@@ -13,8 +13,8 @@ const NavBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
-  flex-grow: 1;
   width: 100%;
+  background:black;
 `;
 
 const VerticalContainer = styled.div`
@@ -25,7 +25,6 @@ const VerticalContainer = styled.div`
 const HorizontallyContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
 `;
 
 export interface INavigationBarProps extends WithAuthenticatorProps {}

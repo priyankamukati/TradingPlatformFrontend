@@ -17,53 +17,91 @@ import NavigationBar from "../../layout/navigationBar";
 
 const UserAccountContainerWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  width: 100vw;
+  height: 100vh;
+  background: #F0F8FF;
   margin-top: 1rem;
 `;
 
 const VerticalContainer = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
 `;
 
-const HorizontalContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 const HorizontallyCenterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-grow: 1;
+
 `;
 
-const GetStockContainer = styled.div`
+const HorizontallySaveCenterContainer = styled.div`
   display: flex;
-  height: 30rem;
+  flex-direction: row;
   justify-content: center;
-  overflow: scroll;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 2rem;
-`;
-
-const SaveStockContainer = styled.div`
-  display: flex;
-  margin-top: 5rem;
+  flex-grow: 1;
 `;
 
 const StockText = styled.div`
   display: flex;
   margin-left: 0.25rem;
   width: 10rem;
-  font-size: 0.75rem;
+  font-size: 100px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+  text-align: left;
 `;
 
 const SpinnerComponent = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+
+const NoStockText = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+
+const PageTitleText = styled.div`
+  display: flex;
+  width: 50rem;
+  font-size: 60px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+  margin-top: 2rem;
+  margin-left: 4rem;
+`;
+
+const StyledButton = styled(Button)`
+  text-align: center;
+  max-height: 4rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  vertical-align: middle;
+  background: #warning;
+`;
+
+const StyledFormControl = styled(Form.Control)`
+  width: 30rem;
+`;
+
+const MainContainer = styled.div`
+  padding: 20rem;
+  background: #EBEDEF;
+`;
+
 
 export interface IUserAccountContainerProps {
   getUserCashBalance: typeof getUserCashBalance;
@@ -81,23 +119,25 @@ const UserAccountContainer: FunctionComponent<IUserAccountContainerProps> & {
   saveUserCashBalance,
   saveUserCashBalanceResponse,
 }: IUserAccountContainerProps) => {
-  console.log(
-    "getUserCashBalanceResponse: ",
-    getUserCashBalanceResponse.data?.cash_balance
-  );
+    console.log(
+      "getUserCashBalanceResponse: ",
+      getUserCashBalanceResponse.data?.cash_balance
+    );
 
-  const { handleOnCashBalanceOnChange, handleDeposit, handleWithdraw } =
-    UserAccountContainerLogic({
-      getUserCashBalance,
-      saveUserCashBalance,
-      saveUserCashBalanceResponse,
-    } as IUserAccountContainerProps);
-  return (
-    <UserAccountContainerWrapper>
-      <NavigationBar></NavigationBar>
-      <HorizontallyCenterContainer>
+    const { handleOnCashBalanceOnChange, handleDeposit, handleWithdraw } =
+      UserAccountContainerLogic({
+        getUserCashBalance,
+        saveUserCashBalance,
+        saveUserCashBalanceResponse,
+      } as IUserAccountContainerProps);
+
+    const balance = getUserCashBalanceResponse.data?.cash_balance ? '$' + getUserCashBalanceResponse.data?.cash_balance.toFixed(2) : '$0'
+    return (
+      <UserAccountContainerWrapper>
+        <NavigationBar></NavigationBar>
+        <PageTitleText>My Account</PageTitleText>
         <VerticalContainer>
-          <GetStockContainer>
+          <HorizontallyCenterContainer>
             <SpinnerComponent>
               {getUserCashBalanceResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
@@ -105,44 +145,53 @@ const UserAccountContainer: FunctionComponent<IUserAccountContainerProps> & {
                 <div></div>
               )}
             </SpinnerComponent>
+          </HorizontallyCenterContainer>
+
+<MainContainer>
+          <HorizontallyCenterContainer>
+            <HorizontallyCenterContainer>
+              <StockText>
+                {balance}
+              </StockText>
+            </HorizontallyCenterContainer>
             <VerticalContainer>
-              <Alert key={"success"} variant={"success"}>
-                <HorizontalContainer>
-                  <StockText>
-                    {getUserCashBalanceResponse.data?.cash_balance}
-                  </StockText>
-                </HorizontalContainer>
-              </Alert>
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasic">
+                  <NoStockText>Enter Amount</NoStockText>
+                  <StyledFormControl
+                    type="text"
+                    placeholder="Enter deposit/withdraw amount"
+                    onChange={handleOnCashBalanceOnChange}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="formBasicCheckbox"
+                ></Form.Group>
+                <StyledButton variant="primary" type="submit" onClick={handleDeposit}>
+                  <NoStockText>Deposit</NoStockText>
+                </StyledButton>{" "}
+                <StyledButton variant="primary" type="submit" onClick={handleWithdraw}>
+                  <NoStockText>Withdraw</NoStockText>
+                </StyledButton>
+              </Form>
             </VerticalContainer>
+          </HorizontallyCenterContainer>
+          </MainContainer>
+          <HorizontallyCenterContainer>
+          
             {getUserCashBalanceResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
-                Error retrieving stocks data. Please try again!
+                <NoStockText>Error retrieving stocks data. Please try again!</NoStockText>
               </Alert>
             ) : (
               <div></div>
             )}
-          </GetStockContainer>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasic">
-              <Form.Label>Enter Amount</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter deposit/withdraw amount"
-                onChange={handleOnCashBalanceOnChange}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="formBasicCheckbox"
-            ></Form.Group>
-            <Button variant="primary" type="submit" onClick={handleDeposit}>
-              Deposit
-            </Button>{" "}
-            <Button variant="primary" type="submit" onClick={handleWithdraw}>
-              Withdraw
-            </Button>
-          </Form>
-          <SaveStockContainer>
+          </HorizontallyCenterContainer>
+          <HorizontallySaveCenterContainer>
+
+          </HorizontallySaveCenterContainer>
+          <HorizontallyCenterContainer>
             <SpinnerComponent>
               {saveUserCashBalanceResponse.loading === LoadingState.Pending ? (
                 <Spinner animation="border" variant="info" />
@@ -150,22 +199,21 @@ const UserAccountContainer: FunctionComponent<IUserAccountContainerProps> & {
                 <div></div>
               )}
             </SpinnerComponent>
-            <Form>
-              <HorizontallyCenterContainer></HorizontallyCenterContainer>
-            </Form>
+          </HorizontallyCenterContainer>
+          <HorizontallyCenterContainer>
             {saveUserCashBalanceResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
-                Error saving stock. Please try again!
+                <NoStockText>Error saving stock. Please try again after sometime!</NoStockText>
               </Alert>
             ) : (
               <div></div>
             )}
-          </SaveStockContainer>
+
+          </HorizontallyCenterContainer>
         </VerticalContainer>
-      </HorizontallyCenterContainer>
-    </UserAccountContainerWrapper>
-  );
-};
+      </UserAccountContainerWrapper>
+    );
+  };
 
 UserAccountContainer.defaultProps = {};
 

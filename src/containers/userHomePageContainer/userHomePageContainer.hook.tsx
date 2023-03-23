@@ -1,8 +1,12 @@
 import React, { useCallback } from "react";
 import { useEffect } from "react";
-import { Stock } from "../../model/stock";
 import { Order } from "../../model/userOrder";
 import { IUserHomePageContainerProps } from "./userHomePageContainer";
+
+const limitValueOptions = [
+  { name: 'Market', value: "1" },
+  { name: 'Limit', value: "2" },
+];
 
 export function UserHomePageContainerLogic({
   getAllStocks,
@@ -11,37 +15,31 @@ export function UserHomePageContainerLogic({
   getAllStocksResponse,
 }: IUserHomePageContainerProps) {
   const [ticker, setTicker] = React.useState<string | undefined>(undefined);
-  const [orderNature, setOrderNature] = React.useState<string | undefined>(
-    undefined
-  );
-  const [orderType, setOrderType] = React.useState<string | undefined>(
-    undefined
-  );
+
   const [quantity, setQuantity] = React.useState<number | undefined>(undefined);
   const [limitPrice, setLimitPrice] = React.useState<number | undefined>(
     undefined
   );
 
-/*   useEffect(() => {
+  const [errorMessage, setErrorMessage] = React.useState<string | undefined>(
+    undefined
+  );
+
+  const [limitValueChecked, setLimitValueChecked] = React.useState<string>(
+    '1'
+  );
+
+
+  useEffect(() => {
     const interval = setInterval(() => {
     getAllStocks();
-     }, 10000)
+     }, 1000)
      return () => clearInterval(interval);
-  }, [getAllStocks]); */
+  }, [getAllStocks]);
 
   const handleOnTickerOnChange = (event: any) => {
     const value = event.target.value;
     setTicker(value);
-  };
-
-  const handleOrderNatureChange = (event: any) => {
-    const value = event.target.value;
-    setOrderNature(value);
-  };
-
-  const handleOrderTypeChange = (event: any) => {
-    const value = event.target.value;
-    setOrderType(value);
   };
 
   const handleOnQuantityChange = (event: any) => {
@@ -63,36 +61,39 @@ export function UserHomePageContainerLogic({
   };
 
   const handleSubmit = useCallback(
-    (event: any) => {
+    (event: any, isBuy: boolean) => {
       event.preventDefault();
       if (
         ticker &&
         ticker.length > 0 &&
-        orderNature &&
-        orderType &&
+        limitValueChecked &&
         quantity &&
         (limitPrice ?? 0) >= 0
       ) {
         const stocks = getAllStocksResponse.data?.filter((stock) => stock.ticker?.toLowerCase() == ticker.toLowerCase());
-        console.log("stocks : ", stocks);
+
         const stock = stocks ? stocks[0] : undefined;
-        console.log("stock : ", stock);
+
         if (stock) {
+        
           const saveOrderRequest = new Order();
           saveOrderRequest.stock_id = stock.id;
           saveOrderRequest.ticker = ticker;
-          saveOrderRequest.order_nature = orderNature.toLowerCase() ;
-          saveOrderRequest.order_type = orderType.toLowerCase() ;
+          saveOrderRequest.order_type = limitValueChecked == "1" ? 'market' : 'limit' ;
+          saveOrderRequest.order_nature  = isBuy ? 'buy' : 'sell';
           saveOrderRequest.quantity = quantity;
           saveOrderRequest.limit_price = limitPrice;
           saveOrder(saveOrderRequest);
+        } else {
+          setErrorMessage("The platform doesn't support the stock ticker")
         }
+      } else {
+        setErrorMessage('Error placing order. Make sure the form fields are submitted correctly')
       }
     },
     [
       ticker,
-      orderNature,
-      orderType,
+      limitValueChecked,
       quantity,
       limitPrice,
       saveOrder,
@@ -104,8 +105,7 @@ export function UserHomePageContainerLogic({
     if (saveOrdersResponse.data) {
       getAllStocks();
       setTicker("");
-      setOrderNature("");
-      setOrderType("");
+      setLimitValueChecked("1");
       setLimitPrice(0);
       setQuantity(0);
     }
@@ -113,15 +113,15 @@ export function UserHomePageContainerLogic({
 
   return {
     ticker,
-    orderNature,
-    orderType,
     quantity,
     limitPrice,
     handleOnTickerOnChange,
-    handleOrderNatureChange,
-    handleOrderTypeChange,
     handleOnQuantityChange,
     handleOnSetLimitPriceChange,
-    handleSubmit,
+    errorMessage,
+    limitValueOptions,
+    limitValueChecked,
+    setLimitValueChecked,
+    handleSubmit
   };
 }

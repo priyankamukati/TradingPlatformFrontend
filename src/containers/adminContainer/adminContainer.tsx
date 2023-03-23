@@ -18,8 +18,11 @@ import { GetUserInfo, UserInfo } from "../../model/userInfo";
 
 const AdminHomePageContainerWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  margin-top: 1rem;
+  width: 100vw;
+  height: 100vh;
+  background: #F0F8FF;
 `;
 
 const VerticalContainer = styled.div`
@@ -41,7 +44,7 @@ const HorizontallyCenterContainer = styled.div`
 
 const GetStockContainer = styled.div`
   display: flex;
-  height: 30rem;
+  height: 40rem;
   justify-content: center;
   overflow: scroll;
   overflow-x: hidden;
@@ -51,14 +54,7 @@ const GetStockContainer = styled.div`
 
 const SaveStockContainer = styled.div`
   display: flex;
-  margin-top: 5rem;
-`;
-
-const StockText = styled.div`
-  display: flex;
-  margin-left: 0.25rem;
-  width: 10rem;
-  font-size: 0.75rem;
+  margin-top: 1rem;
 `;
 
 const SpinnerComponent = styled.div`
@@ -71,13 +67,85 @@ const VerticalCenterContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   flex-grow: 1;
-  height:100rem;
+
 `;
 
-const TextContent  = styled.div`
+const TextContent = styled.div`
   display: flex;
   margin-left: 0.25rem;
-  font-size: 2rem;
+  font-size: 30px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+`;
+
+const StockText = styled.div`
+  display: flex;
+  width: 10rem;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+const NoStockText = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+const StockHeaderText = styled.div`
+  display: flex;
+  width: 10rem;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+const PageTitleText = styled.div`
+  display: flex;
+  width: 30rem;
+  font-size: 60px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+  margin-top: 2rem;
+  margin-left: 4rem;
+`;
+
+const SectionTitleText = styled.div`
+  display: flex;
+  width: 30rem;
+  font-size: 30px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+`;
+
+const StyledButton = styled(Button)`
+  text-align: center;
+  max-height: 4rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  vertical-align: middle;
+  background: #warning;
+`;
+
+const StyledFormLabel = styled.div`
+display: flex;
+width: 10rem;
+font-size: 16px;
+line-weight: 20px;
+letter-spacing: 0.25px;
+font-weight: 400;
+`;
+
+const MainContainer = styled.div`
+  padding: 10rem;
+  background: #EBEDEF;
 `;
 
 
@@ -121,20 +189,51 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
     } as IAdminHomePageContainerProps);
 
 
-    const noAdminContent =       <AdminHomePageContainerWrapper>
-    <AdminNavigationBar></AdminNavigationBar>
-    <VerticalCenterContainer>
-      <HorizontallyCenterContainer>
-        <TextContent>
-          User unauthorized: needs Admin access
+    const noAdminContent = <AdminHomePageContainerWrapper>
+      <AdminNavigationBar></AdminNavigationBar>
+      <VerticalCenterContainer>
+        <HorizontallyCenterContainer>
+          <TextContent>
+            User unauthorized: needs Admin access
           </TextContent>
-          </HorizontallyCenterContainer>
-        </VerticalCenterContainer>
-        </AdminHomePageContainerWrapper>
+        </HorizontallyCenterContainer>
+      </VerticalCenterContainer>
+    </AdminHomePageContainerWrapper>
+
+    const stockHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
+      <StockHeaderText>{'Ticker'}</StockHeaderText>
+      <StockHeaderText>{'Company'}</StockHeaderText>
+      <StockHeaderText>{'Current Price'}</StockHeaderText>
+      <StockHeaderText>{'Initial Price'}</StockHeaderText>
+      <StockHeaderText>{'Volume'}</StockHeaderText>
+    </HorizontalContainer></Alert>
+
+    const stockData = <div>{getAllStocksResponse.data && getAllStocksResponse.data.length > 0 ? getAllStocksResponse.data.map((stock) => (
+      <Alert key={stock.id} variant={'success'}>
+        <HorizontalContainer>
+          <StockText>{stock.ticker}</StockText>
+          <StockText>{stock.company_name}</StockText>
+          <StockText>{stock.current_price ? stock.current_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.initial_price ? stock.initial_price.toFixed(2) : ''}</StockText>
+          <StockText>{stock.volume}</StockText>
+        </HorizontalContainer>
+      </Alert>
+    )) : <Alert key={'no-stock'} variant={'danger'}>
+      <NoStockText>No stocks added to the platform</NoStockText>
+    </Alert>
+    }</div>
+
+    const stockTable = <div>
+      <div>{stockHeaders}</div>
+      <div>{stockData}</div>
+    </div>
+
+
 
     const adminContent = (
       <AdminHomePageContainerWrapper>
         <AdminNavigationBar></AdminNavigationBar>
+        <PageTitleText>Admin Panel</PageTitleText>
         <HorizontallyCenterContainer>
           <VerticalContainer>
             <GetStockContainer>
@@ -146,94 +245,90 @@ const AdminHomePageContainer: FunctionComponent<IAdminHomePageContainerProps> & 
                 )}
               </SpinnerComponent>
               <VerticalContainer>
-                {getAllStocksResponse.data?.map((stock) => (
-                  <Alert key={"success"} variant={"success"}>
-                    <HorizontalContainer>
-                      <StockText>{stock.ticker}</StockText>
-                      <StockText>{stock.company_name}</StockText>
-                      <StockText>{stock.current_price}</StockText>
-                      <StockText>{stock.initial_price}</StockText>
-                      <StockText>{stock.volume}</StockText>
-                    </HorizontalContainer>
-                  </Alert>
-                ))}
+                {stockTable}
               </VerticalContainer>
               {getAllStocksResponse.error ? (
                 <Alert key={"danger"} variant={"danger"}>
-                  Error retrieving stocks data. Please try again!
+                  <NoStockText>Error retrieving stocks data. Please try again!</NoStockText>
                 </Alert>
               ) : (
                 <div></div>
               )}
             </GetStockContainer>
 
-            <SaveStockContainer>
-              <SpinnerComponent>
-                {saveStocksResponse.loading === LoadingState.Pending ? (
-                  <Spinner animation="border" variant="info" />
+            <MainContainer>
+              <SectionTitleText>Add Stocks to Platform</SectionTitleText>
+              <SaveStockContainer>
+                <SpinnerComponent>
+                  {saveStocksResponse.loading === LoadingState.Pending ? (
+                    <Spinner animation="border" variant="info" />
+                  ) : (
+                    <div></div>
+                  )}
+                </SpinnerComponent>
+
+
+                <Form>
+                  <HorizontallyCenterContainer>
+                    <Form.Group className="mb-3" controlId="formStockTicker">
+                      <StyledFormLabel>Stock Ticker</StyledFormLabel>
+                      <Form.Control
+                        value={ticker}
+                        type="input"
+                        placeholder="AAPL"
+                        required
+                        onChange={handleOnTickerOnChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formStockCompanyName">
+                      <StyledFormLabel>Company Name</StyledFormLabel>
+                      <Form.Control
+                        value={companyName}
+                        type="input"
+                        placeholder="Apple Inc"
+                        required
+                        onChange={handleCompanyNameChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formStockInitialPrice">
+                      <StyledFormLabel>Initial Price</StyledFormLabel>
+                      <Form.Control
+                        value={initialPrice}
+                        type="input"
+                        placeholder="50"
+                        required
+                        onChange={handleOnInitialPriceChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formStockQuantity">
+                      <StyledFormLabel>Volume</StyledFormLabel>
+                      <Form.Control
+                        value={volume}
+                        type="input"
+                        placeholder="1000"
+                        required
+                        onChange={handleOnVolumeChange}
+                      />
+                    </Form.Group>
+                  </HorizontallyCenterContainer>
+
+                  <StyledButton variant="primary" type="submit" onClick={handleSubmit}>
+                    <NoStockText> Save</NoStockText>
+                  </StyledButton>
+                </Form>
+                {saveStocksResponse.error ? (
+                  <Alert key={"danger"} variant={"danger"}>
+                    <NoStockText>Error saving stock. Please try again!</NoStockText>
+                  </Alert>
                 ) : (
                   <div></div>
                 )}
-              </SpinnerComponent>
-              <Form>
-                <HorizontallyCenterContainer>
-                  <Form.Group className="mb-3" controlId="formStockTicker">
-                    <Form.Label>Stock Ticker</Form.Label>
-                    <Form.Control
-                      value={ticker}
-                      type="input"
-                      placeholder="AAPL"
-                      required
-                      onChange={handleOnTickerOnChange}
-                    />
-                  </Form.Group>
 
-                  <Form.Group className="mb-3" controlId="formStockCompanyName">
-                    <Form.Label>Company Name</Form.Label>
-                    <Form.Control
-                      value={companyName}
-                      type="input"
-                      placeholder="Apple Inc"
-                      required
-                      onChange={handleCompanyNameChange}
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="formStockInitialPrice">
-                    <Form.Label>Initial Price</Form.Label>
-                    <Form.Control
-                      value={initialPrice}
-                      type="input"
-                      placeholder="50"
-                      required
-                      onChange={handleOnInitialPriceChange}
-                    />
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="formStockQuantity">
-                    <Form.Label>Volume</Form.Label>
-                    <Form.Control
-                      value={volume}
-                      type="input"
-                      placeholder="1000"
-                      required
-                      onChange={handleOnVolumeChange}
-                    />
-                  </Form.Group>
-                </HorizontallyCenterContainer>
-
-                <Button variant="primary" type="submit" onClick={handleSubmit}>
-                  Save
-                </Button>
-              </Form>
-              {saveStocksResponse.error ? (
-                <Alert key={"danger"} variant={"danger"}>
-                  Error saving stock. Please try again!
-                </Alert>
-              ) : (
-                <div></div>
-              )}
-            </SaveStockContainer>
+              </SaveStockContainer>
+            </MainContainer>
           </VerticalContainer>
         </HorizontallyCenterContainer>
       </AdminHomePageContainerWrapper>

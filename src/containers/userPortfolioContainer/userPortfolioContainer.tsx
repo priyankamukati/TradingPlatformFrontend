@@ -12,7 +12,11 @@ import NavigationBar from "../../layout/navigationBar";
 
 const UserPortfolioContainerWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  width: 100vw;
+  height: 100vh;
+  background: #F0F8FF;
   margin-top: 1rem;
 `;
 
@@ -35,7 +39,7 @@ const HorizontallyCenterContainer = styled.div`
 
 const GetStockContainer = styled.div`
   display: flex;
-  height: 30rem;
+  height: 60rem;
   justify-content: center;
   overflow: scroll;
   overflow-x: hidden;
@@ -47,13 +51,45 @@ const StockText = styled.div`
   display: flex;
   margin-left: 0.25rem;
   width: 10rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
+  text-align: left;
 `;
 
 const SpinnerComponent = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+const StockHeaderText = styled.div`
+  display: flex;
+  width: 10rem;
+  font-size: 1rem;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+  text-align: left;
+`;
+
+const NoStockText = styled.div`
+  display: flex;
+  font-size: 14px;
+  line-weight: 20px;
+  letter-spacing: 0.25px;
+  font-weight: 400;
+`;
+
+
+const PageTitleText = styled.div`
+  display: flex;
+  width: 10rem;
+  font-size: 60px;
+  line-weight: 40px;
+  letter-spacing: 0.25px;
+  font-weight: 200;
+  margin-top: 2rem;
+  margin-left: 4rem;
+`;
+
 
 export interface IUserPortfolioContainerProps {
   getUserStocks: typeof getUserStocks;
@@ -64,9 +100,39 @@ const UserPortfolioContainer: FunctionComponent<IUserPortfolioContainerProps> & 
   defaultProps: Partial<IUserPortfolioContainerProps>;
 } = ({ getUserStocks, getUserStocksResponse }: IUserPortfolioContainerProps) => {
   UserPortfolioContainerLogic({ getUserStocks } as IUserPortfolioContainerProps);
+
+  const portfolioHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
+  <StockHeaderText>{'Ticker'}</StockHeaderText>
+  <StockHeaderText>{'Company'}</StockHeaderText>
+  <StockHeaderText>{'Current Price'}</StockHeaderText>
+  <StockHeaderText>{'Volume'}</StockHeaderText>
+  <StockHeaderText>{'Total Asset'}</StockHeaderText>
+</HorizontalContainer></Alert>
+
+const portfolioData = <div>{getUserStocksResponse.data && getUserStocksResponse.data.length > 0 ? getUserStocksResponse.data.map((stock) => (
+  <Alert key={stock.ticker} variant={'success'}>
+    <HorizontalContainer>
+      <StockText>{stock.ticker}</StockText>
+      <StockText>{stock.company_name}</StockText>
+      <StockText>{stock.current_price ? stock.current_price.toFixed(2) : ''}</StockText>
+      <StockText>{stock.quantity ? stock.quantity.toFixed(2) : ''}</StockText>
+      <StockText>{stock.quantity && stock.current_price ? (stock.quantity * stock.current_price).toFixed(2) : 0}</StockText>
+    </HorizontalContainer>
+  </Alert>
+)) : <Alert key={'no-stock'} variant={'danger'}>
+  <NoStockText>No stocks added to the platform</NoStockText>
+</Alert>
+}</div>
+
+const portfolioTable = <div>
+<div>{portfolioHeaders}</div>
+<div>{portfolioData}</div>
+</div>
+
   return (
     <UserPortfolioContainerWrapper>
       <NavigationBar></NavigationBar>
+      <PageTitleText>Portfolio</PageTitleText>
       <HorizontallyCenterContainer>
         <VerticalContainer>
           <GetStockContainer>
@@ -78,27 +144,18 @@ const UserPortfolioContainer: FunctionComponent<IUserPortfolioContainerProps> & 
               )}
             </SpinnerComponent>
             <VerticalContainer>
-              {getUserStocksResponse.data?.map((user_stock) => (
-                <Alert key={"success"} variant={"success"}>
-                  <HorizontalContainer>
-                    <StockText>{user_stock.ticker}</StockText>
-                    <StockText>{user_stock.company_name}</StockText>
-                    <StockText>{user_stock.quantity}</StockText>
-                    <StockText>{user_stock.current_price}</StockText>
-                  </HorizontalContainer>
-                </Alert>
-              ))}
-            </VerticalContainer>
-            {getUserStocksResponse.error ? (
+              {portfolioTable}
+              {getUserStocksResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
-                Error retrieving stocks data. Please try again!
+                <NoStockText>Error retrieving stocks data. Please try again after sometime!</NoStockText>
               </Alert>
             ) : (
               <div></div>
             )}
+            </VerticalContainer>
           </GetStockContainer>
         </VerticalContainer>
-      </HorizontallyCenterContainer>
+        </HorizontallyCenterContainer>    
     </UserPortfolioContainerWrapper>
   );
 };
