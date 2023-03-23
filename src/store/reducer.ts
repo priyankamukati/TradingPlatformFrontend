@@ -8,6 +8,7 @@ import { getUserCashBalanceReducer } from "./getUserCashBalance.slice";
 import { saveUserCashBalanceReducer } from "./saveBalance.slice";
 import { saveUserInfoReducer } from "./saveUserInfo.slice";
 import { getUserInfoReducer } from "./getUserInfo.slice";
+import { cancelOrderReducer } from "./cancelOrder.slice";
 
 const rootReducer = combineReducers({
   getAllStocksReducer: getAllStocksReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   getUserCashBalanceReducer: getUserCashBalanceReducer,
   saveUserCashBalanceReducer: saveUserCashBalanceReducer,
   saveUserInfoReducer: saveUserInfoReducer,
-  getUserInfoReducer: getUserInfoReducer
+  getUserInfoReducer: getUserInfoReducer,
+  cancelOrderReducer: cancelOrderReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

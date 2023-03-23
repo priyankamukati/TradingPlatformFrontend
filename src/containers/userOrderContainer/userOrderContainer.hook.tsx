@@ -5,8 +5,14 @@ import { IUserOrderContainerProps } from "./userOrderContainer";
 
 export function UserOrderContainerLogic({
   getUserAllOrders,
+  cancelOrderResponse
 }: IUserOrderContainerProps) {
   useEffect(() => {
     getUserAllOrders();
   }, [getUserAllOrders]);
+
+  useEffect(() => {
+    getUserAllOrders();
+  }, [cancelOrderResponse]);
+  
 }

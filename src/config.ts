@@ -9,5 +9,6 @@ export const appURL = {
   getUserCashBalanceURL: "/api/usercashbalance",
   saveUserCashBalanceURL: "/api/usercashbalance",
   saveUserInfoURL: "/api/userinfo",
-  getUserInfoURL: "/api/userinfo"
+  getUserInfoURL: "/api/userinfo",
+  cancelOrderURL: "/api/userOrder/cancel"
 };

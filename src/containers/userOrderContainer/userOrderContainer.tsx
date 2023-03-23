@@ -3,12 +3,13 @@ import { FunctionComponent, Dispatch } from "react";
 import { connect } from "react-redux";
 import { UserOrderContainerLogic } from "./userOrderContainer.hook";
 import { getUserAllOrders } from "../../store/getUserAllOrders.slice";
-import { Order } from "../../model/userOrder";
+import { CancelOrder, Order } from "../../model/userOrder";
 import { State } from "../../model/state";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { LoadingState } from "../../model/loadingState";
 import Alert from "react-bootstrap/Alert";
 import NavigationBar from "../../layout/navigationBar";
+import { cancelOrder } from "../../store/cancelOrder.slice";
 
 const UserOrderContainerWrapper = styled.div`
   display: flex;
@@ -94,10 +95,17 @@ const PageTitleText = styled.div`
   margin-left: 4rem;
 `;
 
+const StyledButton = styled(Button)`
+  text-align: center;
+  vertical-align: middle;
+`;
+
 
 export interface IUserOrderContainerProps {
   getUserAllOrders: typeof getUserAllOrders;
   getUserAllOrdersResponse: State<Order[]>;
+  cancelOrder: typeof cancelOrder;
+  cancelOrderResponse: State<CancelOrder>
 }
 
 const UserOrderContainer: FunctionComponent<IUserOrderContainerProps> & {
@@ -105,90 +113,101 @@ const UserOrderContainer: FunctionComponent<IUserOrderContainerProps> & {
 } = ({
   getUserAllOrders,
   getUserAllOrdersResponse,
+  cancelOrder,
+  cancelOrderResponse
 }: IUserOrderContainerProps) => {
-  UserOrderContainerLogic({
-    getUserAllOrders,
-  } as IUserOrderContainerProps);
+    UserOrderContainerLogic({
+      getUserAllOrders,
+    } as IUserOrderContainerProps);
 
 
-  const orderHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
-  <StockHeaderText>{'Ticker'}</StockHeaderText>
-  <StockHeaderText>{'Company'}</StockHeaderText>
-  <StockHeaderText>{'Buy/Sell'}</StockHeaderText>
-  <StockHeaderText>{'Market/Limit'}</StockHeaderText>
-  <StockHeaderText>{'Quantity'}</StockHeaderText>
-  <StockHeaderText>{'Limit Price'}</StockHeaderText>
-  <StockHeaderText>{'Status'}</StockHeaderText>
-  <StockHeaderText>{'Status Reason'}</StockHeaderText>
-</HorizontalContainer></Alert>
+    const orderHeaders = <Alert key={'primary'} variant={'primary'}><HorizontalContainer>
+      <StockHeaderText>{'Ticker'}</StockHeaderText>
+      <StockHeaderText>{'Company'}</StockHeaderText>
+      <StockHeaderText>{'Buy/Sell'}</StockHeaderText>
+      <StockHeaderText>{'Market/Limit'}</StockHeaderText>
+      <StockHeaderText>{'Quantity'}</StockHeaderText>
+      <StockHeaderText>{'Limit Price'}</StockHeaderText>
+      <StockHeaderText>{'Status'}</StockHeaderText>
+      <StockHeaderText>{'Status Reason'}</StockHeaderText>
+      <StockHeaderText>{''}</StockHeaderText>
+    </HorizontalContainer></Alert>
 
-const orderData = <div>{getUserAllOrdersResponse.data && getUserAllOrdersResponse.data.length > 0 ? getUserAllOrdersResponse.data.map((order) => (
-  <Alert key={order.ticker} variant={'success'}>
-    <HorizontalContainer>
-    <StockText>{order.ticker}</StockText>
-                    <StockText>{order.company_name}</StockText>
-                    <StockText>{order.order_nature}</StockText>
-                    <StockText>{order.order_type}</StockText>
-                    <StockText>{order.quantity}</StockText>
-                    <StockText>{order.limit_price}</StockText>
-                    <StockText>{order.status}</StockText>
-                    <StockText>{order.status_reason}</StockText>
-    </HorizontalContainer>
-  </Alert>
-)) : <Alert key={'no-stock'} variant={'danger'}>
-  <NoStockText>No stocks added to the platform</NoStockText>
-</Alert>
-}</div>
+    const orderData = <div>{getUserAllOrdersResponse.data && getUserAllOrdersResponse.data.length > 0 ? 
+      getUserAllOrdersResponse.data.map((order) => (
+      <Alert key={order.ticker} variant={'success'}>
+        <HorizontalContainer>
+          <StockText>{order.ticker}</StockText>
+          <StockText>{order.company_name}</StockText>
+          <StockText>{order.order_nature}</StockText>
+          <StockText>{order.order_type}</StockText>
+          <StockText>{order.quantity}</StockText>
+          <StockText>{order.limit_price}</StockText>
+          <StockText>{order.status}</StockText>
+          <StockText>{order.status_reason}</StockText>
+          <StockText>
+            <StyledButton variant="info" type="submit" onClick={(e: any) => { e.preventDefault(); cancelOrder({ order_id: order.id }) }}>
+              Cancel
+            </StyledButton>
+          </StockText>
+        </HorizontalContainer>
+      </Alert>
+    )) : <Alert key={'no-stock'} variant={'danger'}>
+      <NoStockText>No stocks added to the platform</NoStockText>
+    </Alert>
+    }</div>
 
-const orderTable = <div>
-<div>{orderHeaders}</div>
-<div>{orderData}</div>
-</div>
+    const orderTable = <div>
+      <div>{orderHeaders}</div>
+      <div>{orderData}</div>
+    </div>
 
 
-  return (
-    <UserOrderContainerWrapper>
-      <NavigationBar></NavigationBar>
-      <PageTitleText>Transaction History</PageTitleText>
-      <HorizontallyCenterContainer>
-        <VerticalContainer>
-        
-          <GetStockContainer>
-            <SpinnerComponent>
-              {getUserAllOrdersResponse.loading === LoadingState.Pending ? (
-                <Spinner animation="border" variant="info" />
-              ) : (
-                <div></div>
-              )}
-            </SpinnerComponent>
-            <VerticalContainer>
-              {orderTable}
-            </VerticalContainer>
-          </GetStockContainer>
-          {getUserAllOrdersResponse.error ? (
+    return (
+      <UserOrderContainerWrapper>
+        <NavigationBar></NavigationBar>
+        <PageTitleText>Transaction History</PageTitleText>
+        <HorizontallyCenterContainer>
+          <VerticalContainer>
+
+            <GetStockContainer>
+              <SpinnerComponent>
+                {getUserAllOrdersResponse.loading === LoadingState.Pending ? (
+                  <Spinner animation="border" variant="info" />
+                ) : (
+                  <div></div>
+                )}
+              </SpinnerComponent>
+              <VerticalContainer>
+                {orderTable}
+              </VerticalContainer>
+            </GetStockContainer>
+            {getUserAllOrdersResponse.error ? (
               <Alert key={"danger"} variant={"danger"}>
                 Error retrieving Orders data. Please try again!
               </Alert>
             ) : (
               <div></div>
             )}
-        </VerticalContainer>
-      </HorizontallyCenterContainer>
-    </UserOrderContainerWrapper>
-  );
-};
+          </VerticalContainer>
+        </HorizontallyCenterContainer>
+      </UserOrderContainerWrapper>
+    );
+  };
 
 UserOrderContainer.defaultProps = {};
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     getUserAllOrders: () => dispatch(getUserAllOrders()),
+    cancelOrder: (cancelOrderRequest: CancelOrder) => dispatch(cancelOrder(cancelOrderRequest))
   };
 };
 
 const mapStateToProps = (state: any) => {
   return {
     getUserAllOrdersResponse: state.getUserAllOrdersReducer,
+    cancelOrderResponse: state.cancelOrderReducer,
   };
 };
 
